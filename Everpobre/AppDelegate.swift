@@ -19,10 +19,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         // Creo unas imageCoreData
-        let img1 = imageCoreData(objectid: "1", image: #imageLiteral(resourceName: "noThumbnail.png"))
-        let img2 = imageCoreData(objectid: "2", image: #imageLiteral(resourceName: "noThumbnail.png"))
-        let img3 = imageCoreData(objectid: "3", image: #imageLiteral(resourceName: "noThumbnail.png"))
-        let img4 = imageCoreData(objectid: "4", image: #imageLiteral(resourceName: "noThumbnail.png"))
+        let testImage = #imageLiteral(resourceName: "noThumbnail.png")
+        let targetWidth: CGFloat = 200.0
+        let scaleFactor = targetWidth / testImage.size.width
+        let targetHeight = testImage.size.height * scaleFactor
+        let targetSize = CGSize(width: targetWidth, height: targetHeight)
+        let rect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
+        UIGraphicsBeginImageContextWithOptions(targetSize, false, 1.0)
+        testImage.draw(in: rect)
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        let img1 = imageCoreData(objectid: "1", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
+        let img2 = imageCoreData(objectid: "2", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
+        let img3 = imageCoreData(objectid: "3", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
+        let img4 = imageCoreData(objectid: "4", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
         
         // Creo unas Notas
         var note1 = Note(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: [img1, img2], text: "TEXTOOOOOOOOO11111", notebook: nil)

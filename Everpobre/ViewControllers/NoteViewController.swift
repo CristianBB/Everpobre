@@ -19,7 +19,6 @@ class NoteViewController: UIViewController {
     let endDateTextField = UITextField()
     let tagsTexTield = UITextField()
     let noteTextView = UITextView()
-    var imageMovement = UIImageView()
     
     var relativePoint: CGPoint!
     
@@ -146,14 +145,13 @@ class NoteViewController: UIViewController {
     func addImageToView(imageCoreData: imageCoreData) {
         // Setup img
         let imageView = UIImageView()
-        imageView.backgroundColor = .darkGray
+        //imageView.backgroundColor = .darkGray
         imageView.image = imageCoreData.image
         imageView.accessibilityIdentifier = imageCoreData.objectid // For identification purposes
         
         // Image position
-        //imageView.translatesAutoresizingMaskIntoConstraints = false
-        //imageView.contentMode = UIViewContentMode.scaleAspectFit
-        imageView.frame = CGRect(x: 0.0, y: 0.0, width: 150.0, height: 150.0)
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
+        imageView.frame = imageCoreData.position
         noteTextView.addSubview(imageView)
         
         // Add interaction
@@ -173,7 +171,7 @@ class NoteViewController: UIViewController {
             relativePoint = longPressGesture.location(in: longPressGesture.view)
             
             UIView.animate(withDuration: 0.1, animations: {
-                imageViewPressed.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
+                imageViewPressed.transform = CGAffineTransform.init(scaleX: 1.1, y: 1.1)
             })
             
         case .changed:
@@ -182,7 +180,15 @@ class NoteViewController: UIViewController {
             let locationY = locationPress.y - relativePoint.y
             let locationX = locationPress.x - relativePoint.x
             
-            imageViewPressed.frame = CGRect(x: locationX, y: locationY, width: imageViewPressed.frame.size.width, height: imageViewPressed.frame.size.height)
+            let newPositionRect = CGRect(x: locationX, y: locationY, width: imageViewPressed.frame.size.width, height: imageViewPressed.frame.size.height)
+            
+            // Controls that new position don't goes out of noteTextView content
+            if (newPositionRect.maxX > noteTextView.frame.width || newPositionRect.maxY > noteTextView.frame.height ||
+                newPositionRect.minX < 0.0 || newPositionRect.minY < 0.0) {
+                
+            } else {
+                imageViewPressed.frame = newPositionRect
+            }
             
         case .ended, .cancelled:
             

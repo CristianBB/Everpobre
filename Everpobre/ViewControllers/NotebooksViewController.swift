@@ -11,6 +11,7 @@ import UIKit
 struct imageCoreData {
     var objectid: String
     var image: UIImage
+    var position: CGRect
 }
 
 struct Note {
