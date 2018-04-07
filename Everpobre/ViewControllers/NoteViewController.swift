@@ -19,6 +19,9 @@ class NoteViewController: UIViewController {
     let endDateTextField = UITextField()
     let tagsTexTield = UITextField()
     let noteTextView = UITextView()
+    var imageMovement = UIImageView()
+    
+    var relativePoint: CGPoint!
     
     // MARK: - Initialization
     init(model: Note) {
@@ -48,16 +51,22 @@ class NoteViewController: UIViewController {
         view.addGestureRecognizer(swipeGesture)
     }
     
-    func syncModelWithView() {
-        let dateFormatter: DateFormatter = DateFormatter()
-        dateFormatter.locale = Locale.current
-        dateFormatter.dateFormat = "dd/MM/yyyy hh:mm a"
-
-        titleTextField.text = model.title
-        notebookLabel.text = model.notebook?.name
-        endDateTextField.text = dateFormatter.string(from: model.endDate)
-        tagsTexTield.text = model.tags.flatMap({$0})?.joined()
-        noteTextView.text = model.text
+    override func viewDidLayoutSubviews()
+    {
+        // Empty exclusionPaths from noteTextView
+        noteTextView.textContainer.exclusionPaths = []
+        
+        // Iterate subviews on noteTextView
+        for subview in noteTextView.subviews {
+            if let imageView = subview as? UIImageView {
+                // If actual subview is UIImageView, calculate exclusionPaths
+                var rect = view.convert(imageView.frame, to: noteTextView)
+                rect = rect.insetBy(dx: -10, dy: -10)
+                
+                let paths = UIBezierPath(rect: rect)
+                noteTextView.textContainer.exclusionPaths.append(paths)
+            }
+        }
     }
     
     func setupUI() {
@@ -89,7 +98,7 @@ class NoteViewController: UIViewController {
         
         // Configure endDate
         myView.addSubview(endDateTextField)
-        endDateTextField.addTarget(self, action: #selector(editingendDateTextField), for: UIControlEvents.touchDown)
+        endDateTextField.addTarget(self, action: #selector(editingEndDateTextField), for: UIControlEvents.touchDown)
         endDateTextField.backgroundColor = .red
         endDateTextField.rightAnchor.constraint(equalTo: tagsTexTield.leftAnchor, constant: -8).isActive = true
         endDateTextField.topAnchor.constraint(equalTo: tagsTexTield.topAnchor).isActive = true
@@ -115,9 +124,82 @@ class NoteViewController: UIViewController {
         self.view = myView
     }
     
+    func syncModelWithView() {
+        let dateFormatter: DateFormatter = DateFormatter()
+        dateFormatter.locale = Locale.current
+        dateFormatter.dateFormat = "dd/MM/yyyy hh:mm a"
+        
+        titleTextField.text = model.title
+        notebookLabel.text = model.notebook?.name
+        endDateTextField.text = dateFormatter.string(from: model.endDate)
+        tagsTexTield.text = model.tags.flatMap({$0})?.joined()
+        noteTextView.text = model.text
+        
+        guard let imageCoreData = model.images else { return }
+        for imageAct in imageCoreData {
+            
+            addImageToView(imageCoreData: imageAct)
+        }
+    }
+    
+    // Add and image inside noteTextView
+    func addImageToView(imageCoreData: imageCoreData) {
+        // Setup img
+        let imageView = UIImageView()
+        imageView.backgroundColor = .darkGray
+        imageView.image = imageCoreData.image
+        imageView.accessibilityIdentifier = imageCoreData.objectid // For identification purposes
+        
+        // Image position
+        //imageView.translatesAutoresizingMaskIntoConstraints = false
+        //imageView.contentMode = UIViewContentMode.scaleAspectFit
+        imageView.frame = CGRect(x: 0.0, y: 0.0, width: 150.0, height: 150.0)
+        noteTextView.addSubview(imageView)
+        
+        // Add interaction
+        imageView.isUserInteractionEnabled = true
+        let moveGesture = UILongPressGestureRecognizer(target: self, action: #selector(moveImage))
+        imageView.addGestureRecognizer(moveGesture)
+    }
+    
+    // LongPressGesture: User move the image
+    @objc func moveImage(longPressGesture:UILongPressGestureRecognizer)
+    {
+        let imageViewPressed = longPressGesture.view as! UIImageView
+        
+        switch longPressGesture.state {
+        case .began:
+            closeKeyboard()
+            relativePoint = longPressGesture.location(in: longPressGesture.view)
+            
+            UIView.animate(withDuration: 0.1, animations: {
+                imageViewPressed.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
+            })
+            
+        case .changed:
+            let locationPress = longPressGesture.location(in: noteTextView)
+            
+            let locationY = locationPress.y - relativePoint.y
+            let locationX = locationPress.x - relativePoint.x
+            
+            imageViewPressed.frame = CGRect(x: locationX, y: locationY, width: imageViewPressed.frame.size.width, height: imageViewPressed.frame.size.height)
+            
+        case .ended, .cancelled:
+            
+            UIView.animate(withDuration: 0.1, animations: {
+                imageViewPressed.transform = CGAffineTransform.init(scaleX: 1, y: 1)
+            })
+            
+        default:
+            break
+        }
+        
+        // Force Layout Update
+        view.setNeedsLayout()
+    }
     
     // Instead of keyboard for endDate edition, we'll use DatePicker
-    @objc func editingendDateTextField(textField: UITextField) {
+    @objc func editingEndDateTextField(textField: UITextField) {
         let datePickerView = UIDatePicker()
         datePickerView.datePickerMode = UIDatePickerMode.dateAndTime
         datePickerView.locale = Locale.current

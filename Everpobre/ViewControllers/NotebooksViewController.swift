@@ -8,12 +8,17 @@
 
 import UIKit
 
+struct imageCoreData {
+    var objectid: String
+    var image: UIImage
+}
+
 struct Note {
     var title: String
     var creationDate: Date
     var endDate: Date
     var tags: [String]?
-    var images: [UIImage]?
+    var images: [imageCoreData]?
     var text: String
     var notebook: Notebook?
 }
@@ -22,6 +27,7 @@ struct Notebook {
     var name: String
     var notes: [Note]
 }
+
 
 class NotebooksViewController: UITableViewController {
 

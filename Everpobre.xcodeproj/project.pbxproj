@@ -14,6 +14,7 @@
 		4011D6052051F0E700D3B262 /* NoteViewByCodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011D6042051F0E700D3B262 /* NoteViewByCodeController.swift */; };
 		409D5BB32078E0A000690C4B /* NotebooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB22078E0A000690C4B /* NotebooksViewController.swift */; };
 		409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB42078E94E00690C4B /* NoteViewController.swift */; };
+		409D5BB7207958B900690C4B /* noThumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 409D5BB6207958B900690C4B /* noThumbnail.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		4011D6042051F0E700D3B262 /* NoteViewByCodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewByCodeController.swift; sourceTree = "<group>"; };
 		409D5BB22078E0A000690C4B /* NotebooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksViewController.swift; sourceTree = "<group>"; };
 		409D5BB42078E94E00690C4B /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		409D5BB6207958B900690C4B /* noThumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noThumbnail.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		4011D5DD2051CED100D3B262 /* Everpobre */ = {
 			isa = PBXGroup;
 			children = (
+				409D5BB8207958D900690C4B /* Assets */,
 				409D5BB12078DD1B00690C4B /* ViewControllers */,
 				4030A7FC205717DB00AFE359 /* Model */,
 				4011D5DE2051CED100D3B262 /* AppDelegate.swift */,
@@ -113,6 +116,14 @@
 				409D5BB42078E94E00690C4B /* NoteViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		409D5BB8207958D900690C4B /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				409D5BB6207958B900690C4B /* noThumbnail.png */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +211,7 @@
 			files = (
 				4011D5FF2051CF2A00D3B262 /* Launch Screen.storyboard in Resources */,
 				4011D5E62051CED100D3B262 /* Assets.xcassets in Resources */,
+				409D5BB7207958B900690C4B /* noThumbnail.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

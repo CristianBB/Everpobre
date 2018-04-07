@@ -18,10 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow()
         
+        // Creo unas imageCoreData
+        let img1 = imageCoreData(objectid: "1", image: #imageLiteral(resourceName: "noThumbnail.png"))
+        let img2 = imageCoreData(objectid: "2", image: #imageLiteral(resourceName: "noThumbnail.png"))
+        let img3 = imageCoreData(objectid: "3", image: #imageLiteral(resourceName: "noThumbnail.png"))
+        let img4 = imageCoreData(objectid: "4", image: #imageLiteral(resourceName: "noThumbnail.png"))
+        
         // Creo unas Notas
-        var note1 = Note(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: nil, text: "TEXTOOOOOOOOO11111", notebook: nil)
-        var note2 = Note(title: "Nota 2", creationDate: Date(), endDate: Date(), tags: ["otra", "mas"], images: nil, text: "TEXTOOOOOOOOO22222", notebook: nil)
-        var note3 = Note(title: "Nota 3", creationDate: Date(), endDate: Date(), tags: ["ultima", "nota"], images: nil, text: "TEXTOOOOOOOOO33333", notebook: nil)
+        var note1 = Note(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: [img1, img2], text: "TEXTOOOOOOOOO11111", notebook: nil)
+        var note2 = Note(title: "Nota 2", creationDate: Date(), endDate: Date(), tags: ["otra", "mas"], images: [img3], text: "TEXTOOOOOOOOO22222", notebook: nil)
+        var note3 = Note(title: "Nota 3", creationDate: Date(), endDate: Date(), tags: ["ultima", "nota"], images: [img4], text: "TEXTOOOOOOOOO33333", notebook: nil)
         
         // Creo unos Notebooks
         let notebook1 = Notebook(name: "Notebook 1", notes: [note1, note2])
