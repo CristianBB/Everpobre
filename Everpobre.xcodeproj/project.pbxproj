@@ -15,6 +15,8 @@
 		409D5BB32078E0A000690C4B /* NotebooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB22078E0A000690C4B /* NotebooksViewController.swift */; };
 		409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB42078E94E00690C4B /* NoteViewController.swift */; };
 		409D5BB7207958B900690C4B /* noThumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 409D5BB6207958B900690C4B /* noThumbnail.png */; };
+		409D5BBB207A245000690C4B /* SkyFloatingLabelTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */; };
+		409D5BBD207A245500690C4B /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBC207A245500690C4B /* WSTagsField.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 		409D5BB22078E0A000690C4B /* NotebooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksViewController.swift; sourceTree = "<group>"; };
 		409D5BB42078E94E00690C4B /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		409D5BB6207958B900690C4B /* noThumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noThumbnail.png; sourceTree = "<group>"; };
+		409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyFloatingLabelTextField.framework; path = Carthage/Build/iOS/SkyFloatingLabelTextField.framework; sourceTree = "<group>"; };
+		409D5BBC207A245500690C4B /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = Carthage/Build/iOS/WSTagsField.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				409D5BBB207A245000690C4B /* SkyFloatingLabelTextField.framework in Frameworks */,
+				409D5BBD207A245500690C4B /* WSTagsField.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +72,7 @@
 				4011D5DD2051CED100D3B262 /* Everpobre */,
 				4011D5F22051CED100D3B262 /* EverpobreTests */,
 				4011D5DC2051CED100D3B262 /* Products */,
+				409D5BB9207A245000690C4B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +133,15 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
+		409D5BB9207A245000690C4B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				409D5BBC207A245500690C4B /* WSTagsField.framework */,
+				409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -136,6 +152,7 @@
 				4011D5D72051CED100D3B262 /* Sources */,
 				4011D5D82051CED100D3B262 /* Frameworks */,
 				4011D5D92051CED100D3B262 /* Resources */,
+				409D5BBE207A255C00690C4B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -223,6 +240,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		409D5BBE207A255C00690C4B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SkyFloatingLabelTextField.framework",
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WSTagsField.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SkyFloatingLabelTextField.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4011D5D72051CED100D3B262 /* Sources */ = {
@@ -371,6 +408,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Everpobre/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cbb.Everpobre;
@@ -385,6 +426,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Everpobre/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cbb.Everpobre;
