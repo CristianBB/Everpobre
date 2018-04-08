@@ -290,32 +290,44 @@ extension NoteViewController {
                         imageView.layer.borderWidth = 1.5
                         imageView.layer.borderColor = UIColor.red.cgColor
                         
-                        // Add tap gesture to cancel edit mode
-                        let cancelGesture = UITapGestureRecognizer(target: self, action: #selector(oneTapGesture))
-                        cancelGesture.numberOfTapsRequired = 1
-                        imageView.addGestureRecognizer(cancelGesture)
-                        
-                        // Add swipeGesture to rotate image right
+                        // Add swipeGesture to rotate image to right
                         let swipeGestureRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRotateImage))
                         swipeGestureRight.direction = .right
                         imageView.addGestureRecognizer(swipeGestureRight)
                         
+                        // Add swipeGesture to rotate image to left
                         let swipeGestureLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeRotateImage))
                         swipeGestureLeft.direction = .left
                         imageView.addGestureRecognizer(swipeGestureLeft)
                         
+                        // Add swipeGesture to delete image
                         let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeDeleteImage))
                         swipeGestureDown.direction = .down
                         imageView.addGestureRecognizer(swipeGestureDown)
+                        
+                        // Add swipeGesture to scale image
+                        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchScaleImage))
+                        imageView.addGestureRecognizer(pinchGesture)
                         
                         return
                     }
                 }
             }
             
+        } else if (gestureActive == .editImage) {
+            // Check if gesture was released on a UIImageView currently being edited
+            for subview in noteTextView.subviews {
+                if let imageView = subview as? UIImageView {
+                    if (imageView.frame.contains(tapGesture.location(in: noteTextView)) &&
+                        imageView == imageActive) {
+                        deactivateEdition()
+                    }
+                }
+            }
         }
     }
     
+    // SwipeGesture Left/Right: Rotate image on gesture direction
     @objc func swipeRotateImage(swipeGesture: UISwipeGestureRecognizer) {
         guard let oldImage = imageActive?.image else { return }
         
@@ -348,10 +360,10 @@ extension NoteViewController {
         imageActive?.frame = CGRect(x: (imageActive?.frame.origin.x)!, y: (imageActive?.frame.origin.y)!, width: newImage.size.width, height: newImage.size.height)
         
         // Update model
-        for var imageModel in model.images! {
-            if (imageModel.objectid == imageActive?.accessibilityIdentifier) {
-                imageModel.image = (imageActive?.image)!
-                imageModel.position = (imageActive?.frame)!
+        for index in 0..<model.images!.count {
+            if (model.images![index].objectid == imageActive?.accessibilityIdentifier) {
+                model.images![index].image = (imageActive?.image)!
+                model.images![index].position =  (imageActive?.frame)!
             }
         }
         
@@ -359,12 +371,38 @@ extension NoteViewController {
         view.setNeedsLayout()
     }
     
+    // SwipeGesture Down: Remove image with confirmation dialog
     @objc func swipeDeleteImage(swipeGesture: UISwipeGestureRecognizer) {
+        
+        if (swipeGesture.state == .ended) {
+            let confirmation = UIAlertController(title: "Confirm", message: "Are you sure you want to delete this?", preferredStyle: .alert)
+            let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+                
+                // Delete from model
+                for index in 0..<self.model.images!.count {
+                    if (self.model.images![index].objectid == self.imageActive?.accessibilityIdentifier) {
+                        self.model.images?.remove(at: index)
+                    }
+                }
+                self.deactivateEdition()
+                self.syncModelWithView()
+            })
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+            
+            confirmation.addAction(ok)
+            confirmation.addAction(cancel)
+            
+            self.present(confirmation, animated: true, completion: nil)
+        }
         
     }
     
-    // One tap: Deactivate any pending gesture action
-    @objc func oneTapGesture(tapGesture: UITapGestureRecognizer) {
+    @objc func pinchScaleImage(pinchGesture: UIPinchGestureRecognizer) {
+        
+    }
+    
+    // Deactivate any pending gesture action
+    func deactivateEdition() {
         if (gestureActive == .editImage) {
             imageActive?.gestureRecognizers?.forEach((imageActive?.removeGestureRecognizer(_:))!)
             imageActive?.layer.borderWidth = 0
@@ -431,12 +469,11 @@ extension NoteViewController {
             })
             
             // Update model
-            for var imageModel in model.images! {
-                if (imageModel.objectid == imageViewPressed.accessibilityIdentifier) {
-                    imageModel.position = imageViewPressed.frame
+            for index in 0..<model.images!.count {
+                if (model.images![index].objectid == imageViewPressed.accessibilityIdentifier) {
+                    model.images![index].position = imageViewPressed.frame
                 }
             }
-
             
         default:
             break
