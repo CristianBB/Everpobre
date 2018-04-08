@@ -14,6 +14,7 @@ enum longPressGestureActive:String {
     case noActive = "noActive"
     case imagePressed = "imagePressed"
     case notePressed = "notePressed"
+    case editImage = "editImage"
 }
 
 class NoteViewController: UIViewController {
@@ -62,6 +63,11 @@ class NoteViewController: UIViewController {
         // noteTextView Gesture - LongPress
         let moveGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressGesture))
         noteTextView.addGestureRecognizer(moveGesture)
+        
+        // noteTextView Gesture - Double Tap
+        let twoTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTapGesture))
+        twoTapGesture.numberOfTapsRequired = 2
+        noteTextView.addGestureRecognizer(twoTapGesture)
         
         // tagsTexTield Events
         tagsTexTield.onDidAddTag = { (_,_) in
@@ -189,6 +195,15 @@ class NoteViewController: UIViewController {
     }
     
     func syncModelWithView() {
+        
+        // Remove UIImageViews in noteTextView
+        for subview in noteTextView.subviews {
+            if let imageView = subview as? UIImageView {
+                imageView.removeFromSuperview()
+            }
+        }
+
+        
         let dateFormatter: DateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "dd/MM/yyyy hh:mm a"
@@ -223,10 +238,7 @@ class NoteViewController: UIViewController {
         imageView.frame = imageCoreData.position
         noteTextView.addSubview(imageView)
         
-        // Add gesture interaction to Image
         imageView.isUserInteractionEnabled = true
-        //let moveGesture = UILongPressGestureRecognizer(target: self, action: #selector(moveImage))
-        //imageView.addGestureRecognizer(moveGesture)
     }
     
     // Instead of keyboard for endDate edition, we'll use DatePicker
@@ -261,6 +273,102 @@ extension NoteViewController {
             tagsTexTield.endEditing()
         } else if (noteTextView.isFirstResponder) {
             noteTextView.resignFirstResponder()
+        }
+    }
+    
+    // DoubleTapGesture: Initialize image edition mode
+    @objc func doubleTapGesture(tapGesture:UITapGestureRecognizer) {
+        if (gestureActive == .noActive) {
+            // Check if gesture was released on a UIImageView
+            for subview in noteTextView.subviews {
+                if let imageView = subview as? UIImageView {
+                    if (imageView.frame.contains(tapGesture.location(in: noteTextView))) {
+                        gestureActive = .editImage
+                        imageActive = imageView
+                        
+                        // Sets border to identify edition mode
+                        imageView.layer.borderWidth = 1.5
+                        imageView.layer.borderColor = UIColor.red.cgColor
+                        
+                        // Add tap gesture to cancel edit mode
+                        let cancelGesture = UITapGestureRecognizer(target: self, action: #selector(oneTapGesture))
+                        cancelGesture.numberOfTapsRequired = 1
+                        imageView.addGestureRecognizer(cancelGesture)
+                        
+                        // Add swipeGesture to rotate image right
+                        let swipeGestureRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRotateImage))
+                        swipeGestureRight.direction = .right
+                        imageView.addGestureRecognizer(swipeGestureRight)
+                        
+                        let swipeGestureLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeRotateImage))
+                        swipeGestureLeft.direction = .left
+                        imageView.addGestureRecognizer(swipeGestureLeft)
+                        
+                        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeDeleteImage))
+                        swipeGestureDown.direction = .down
+                        imageView.addGestureRecognizer(swipeGestureDown)
+                        
+                        return
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    @objc func swipeRotateImage(swipeGesture: UISwipeGestureRecognizer) {
+        guard let oldImage = imageActive?.image else { return }
+        
+        var degrees: CGFloat
+        if (swipeGesture.direction == .right) {
+            degrees = 90
+        } else {
+            degrees = -90
+        }
+        
+        //Calculate the size of the rotated view's containing box for our drawing space
+        let rotatedViewBox: UIView = UIView(frame: CGRect(x: 0, y: 0, width: oldImage.size.width, height: oldImage.size.height))
+        let t: CGAffineTransform = CGAffineTransform(rotationAngle: degrees * CGFloat.pi / 180)
+        rotatedViewBox.transform = t
+        let rotatedSize: CGSize = rotatedViewBox.frame.size
+        //Create the bitmap context
+        UIGraphicsBeginImageContext(rotatedSize)
+        let bitmap: CGContext = UIGraphicsGetCurrentContext()!
+        //Move the origin to the middle of the image so we will rotate and scale around the center.
+        bitmap.translateBy(x: rotatedSize.width / 2, y: rotatedSize.height / 2)
+        //Rotate the image context
+        bitmap.rotate(by: (degrees * CGFloat.pi / 180))
+        //Now, draw the rotated/scaled image into the context
+        bitmap.scaleBy(x: 1.0, y: -1.0)
+        bitmap.draw(oldImage.cgImage!, in: CGRect(x: -oldImage.size.width / 2, y: -oldImage.size.height / 2, width: oldImage.size.width, height: oldImage.size.height))
+        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        imageActive?.image = newImage
+        imageActive?.frame = CGRect(x: (imageActive?.frame.origin.x)!, y: (imageActive?.frame.origin.y)!, width: newImage.size.width, height: newImage.size.height)
+        
+        // Update model
+        for var imageModel in model.images! {
+            if (imageModel.objectid == imageActive?.accessibilityIdentifier) {
+                imageModel.image = (imageActive?.image)!
+                imageModel.position = (imageActive?.frame)!
+            }
+        }
+        
+        // Force Layout Update
+        view.setNeedsLayout()
+    }
+    
+    @objc func swipeDeleteImage(swipeGesture: UISwipeGestureRecognizer) {
+        
+    }
+    
+    // One tap: Deactivate any pending gesture action
+    @objc func oneTapGesture(tapGesture: UITapGestureRecognizer) {
+        if (gestureActive == .editImage) {
+            imageActive?.gestureRecognizers?.forEach((imageActive?.removeGestureRecognizer(_:))!)
+            imageActive?.layer.borderWidth = 0
+            gestureActive = .noActive
         }
     }
     
@@ -321,6 +429,14 @@ extension NoteViewController {
             UIView.animate(withDuration: 0.1, animations: {
                 imageViewPressed.transform = CGAffineTransform.init(scaleX: 1, y: 1)
             })
+            
+            // Update model
+            for var imageModel in model.images! {
+                if (imageModel.objectid == imageViewPressed.accessibilityIdentifier) {
+                    imageModel.position = imageViewPressed.frame
+                }
+            }
+
             
         default:
             break
