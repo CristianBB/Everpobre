@@ -58,7 +58,27 @@ class NoteViewController: UIViewController {
         // Iterate subviews on noteTextView
         for subview in noteTextView.subviews {
             if let imageView = subview as? UIImageView {
-                // If actual subview is UIImageView, calculate exclusionPaths
+                // If actual subview is UIImageView, check that position is inside noteTextView area
+                var imageFrame = imageView.frame
+                    
+                if (imageFrame.maxX > noteTextView.frame.width) {
+                    let differX = imageFrame.maxX - noteTextView.frame.width
+                    imageFrame = CGRect(x: imageFrame.origin.x - differX, y: imageFrame.origin.y, width: imageFrame.width, height: imageFrame.height)
+                }
+                if (imageFrame.maxY > noteTextView.frame.height) {
+                    let differY = imageFrame.maxY - noteTextView.frame.height
+                    imageFrame = CGRect(x: imageFrame.origin.x, y: imageFrame.origin.y - differY, width: imageFrame.width, height: imageFrame.height)
+                }
+                if (imageFrame.minX < 0.0) {
+                    imageFrame = CGRect(x: 0.0, y: imageFrame.origin.y, width: imageFrame.width, height: imageFrame.height)
+                }
+                if (imageFrame.minY < 0.0) {
+                    imageFrame = CGRect(x: imageFrame.origin.x, y: 0.0, width: imageFrame.width, height: imageFrame.height)
+                }
+                imageView.frame = imageFrame
+                
+                
+                // Calculate exclusionPaths
                 var rect = view.convert(imageView.frame, to: noteTextView)
                 rect = rect.insetBy(dx: -10, dy: -10)
                 
@@ -181,14 +201,7 @@ class NoteViewController: UIViewController {
             let locationX = locationPress.x - relativePoint.x
             
             let newPositionRect = CGRect(x: locationX, y: locationY, width: imageViewPressed.frame.size.width, height: imageViewPressed.frame.size.height)
-            
-            // Controls that new position don't goes out of noteTextView content
-            if (newPositionRect.maxX > noteTextView.frame.width || newPositionRect.maxY > noteTextView.frame.height ||
-                newPositionRect.minX < 0.0 || newPositionRect.minY < 0.0) {
-                
-            } else {
-                imageViewPressed.frame = newPositionRect
-            }
+            imageViewPressed.frame = newPositionRect
             
         case .ended, .cancelled:
             
