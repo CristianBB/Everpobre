@@ -398,7 +398,7 @@ extension NoteViewController {
     }
     
     @objc func pinchScaleImage(pinchGesture: UIPinchGestureRecognizer) {
-        
+        // CBB AQUIIIIII
     }
     
     // Deactivate any pending gesture action
@@ -436,9 +436,6 @@ extension NoteViewController {
             addElement(longPressGesture: longPressGesture)
         }
         
-        if (longPressGesture.state == .cancelled || longPressGesture.state == .ended) {
-            gestureActive = .noActive
-        }
     }
     
     
@@ -474,6 +471,7 @@ extension NoteViewController {
                     model.images![index].position = imageViewPressed.frame
                 }
             }
+            gestureActive = .noActive
             
         default:
             break
@@ -523,6 +521,9 @@ extension NoteViewController {
             actionSheetAlert.addAction(cancel)
             
             present(actionSheetAlert, animated: true, completion: nil)
+        
+        } else if (longPressGesture.state == .ended || longPressGesture.state == .cancelled) {
+            gestureActive = .noActive
         }
      
     }
