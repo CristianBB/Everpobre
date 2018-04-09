@@ -398,7 +398,45 @@ extension NoteViewController {
     }
     
     @objc func pinchScaleImage(pinchGesture: UIPinchGestureRecognizer) {
-        // CBB AQUIIIIII
+        
+        if (pinchGesture.state == .ended || pinchGesture.state == .changed) {
+            var currentScale:CGFloat = 1
+            
+            // Search image on Model
+            for index in 0..<model.images!.count {
+                if (model.images![index].objectid == imageActive?.accessibilityIdentifier) {
+                    
+                    currentScale = model.images![index].scale
+                }
+            }
+            
+            var newScale:CGFloat = currentScale * pinchGesture.scale;
+            if (newScale < 0.7) {
+                newScale = 0.7;
+            }
+            if (newScale > 1.5) {
+                newScale = 1.5;
+            }
+            
+            let originalWidth = (imageActive?.frame.width)! / currentScale
+            let originalHeight = (imageActive?.frame.height)! / currentScale
+            let newPosition = CGRect(x: (imageActive?.frame.origin.x)!, y: (imageActive?.frame.origin.y)!, width: originalWidth * newScale, height: originalHeight * newScale)
+            
+            imageActive?.frame = newPosition
+            for index in 0..<model.images!.count {
+                if (model.images![index].objectid == imageActive?.accessibilityIdentifier) {
+                    
+                    // Update scale in model
+                    model.images![index].scale = newScale
+                }
+            }
+            
+            pinchGesture.scale = 1;
+            
+            // Force Layout Update
+            view.setNeedsLayout()
+        }
+
     }
     
     // Deactivate any pending gesture action
@@ -557,7 +595,7 @@ extension NoteViewController: UIImagePickerControllerDelegate, UINavigationContr
             let newPosition = CGRect(x: locationX, y: locationY, width: targetWidth, height: targetHeight)
             
             // Add image
-            let imageAdded = imageCoreData(objectid: "5", image: scaledImage!, position: newPosition)
+            let imageAdded = imageCoreData(objectid: "5", image: scaledImage!, position: newPosition, scale: 1)
             model.images?.append(imageAdded)
             addImageToView(imageCoreData: imageAdded)
         }

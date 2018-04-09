@@ -12,6 +12,7 @@ struct imageCoreData {
     var objectid: String
     var image: UIImage
     var position: CGRect
+    var scale: CGFloat
 }
 
 struct Note {

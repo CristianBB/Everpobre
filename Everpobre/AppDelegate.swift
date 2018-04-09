@@ -30,10 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
 
-        let img1 = imageCoreData(objectid: "1", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
-        let img2 = imageCoreData(objectid: "2", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
-        let img3 = imageCoreData(objectid: "3", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
-        let img4 = imageCoreData(objectid: "4", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height))
+        let img1 = imageCoreData(objectid: "1", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
+        let img2 = imageCoreData(objectid: "2", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
+        let img3 = imageCoreData(objectid: "3", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
+        let img4 = imageCoreData(objectid: "4", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
         
         // Creo unas Notas
         var note1 = Note(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: [img1, img2], text: "TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111", notebook: nil)
