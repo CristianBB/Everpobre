@@ -13,13 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = UIWindow()
         
-        // Creo unas imageCoreData
-        let testImage = #imageLiteral(resourceName: "noThumbnail.png")
+        // Creo unas imageCoreDataDummy
+        let testImage = #imageLiteral(resourceName: "imagencita.png")
         let targetWidth: CGFloat = 200.0
         let scaleFactor = targetWidth / testImage.size.width
         let targetHeight = testImage.size.height * scaleFactor
@@ -29,20 +28,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         testImage.draw(in: rect)
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        
+        let rectString = NSStringFromCGRect(rect)
 
-        let img1 = imageCoreData(objectid: "1", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
-        let img2 = imageCoreData(objectid: "2", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
-        let img3 = imageCoreData(objectid: "3", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
-        let img4 = imageCoreData(objectid: "4", image: scaledImage!, position: CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height), scale: 1)
+        let img1 = imageCoreDataDummy(objectid: "1", image: scaledImage!, originalFrame: rectString, actualFrame: rectString)
+        let img2 = imageCoreDataDummy(objectid: "2", image: scaledImage!, originalFrame: rectString, actualFrame: rectString)
+        let img3 = imageCoreDataDummy(objectid: "3", image: scaledImage!, originalFrame: rectString, actualFrame: rectString)
+        let img4 = imageCoreDataDummy(objectid: "4", image: scaledImage!, originalFrame: rectString, actualFrame: rectString)
         
         // Creo unas Notas
-        var note1 = Note(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: [img1, img2], text: "TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111", notebook: nil)
-        var note2 = Note(title: "Nota 2", creationDate: Date(), endDate: Date(), tags: ["otra", "mas"], images: [img3], text: "TEXTOOOOOOOOO22222", notebook: nil)
-        var note3 = Note(title: "Nota 3", creationDate: Date(), endDate: Date(), tags: ["ultima", "nota"], images: [img4], text: "TEXTOOOOOOOOO33333", notebook: nil)
+        var note1 = NoteDummy(title: "Nota 1", creationDate: Date(), endDate:  Date(), tags: ["nota", "nueva"], images: [img1, img2], text: "TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111TEXTOOOOOOOOO11111", notebook: nil)
+        var note2 = NoteDummy(title: "Nota 2", creationDate: Date(), endDate: Date(), tags: ["otra", "mas"], images: [img3], text: "TEXTOOOOOOOOO22222", notebook: nil)
+        var note3 = NoteDummy(title: "Nota 3", creationDate: Date(), endDate: Date(), tags: ["ultima", "nota"], images: [img4], text: "TEXTOOOOOOOOO33333", notebook: nil)
         
         // Creo unos Notebooks
-        let notebook1 = Notebook(name: "Notebook 1", notes: [note1, note2])
-        let notebook2 = Notebook(name: "Notebook 2", notes: [note3])
+        let notebook1 = NotebookDummy(name: "Notebook 1", notes: [note1, note2])
+        let notebook2 = NotebookDummy(name: "Notebook 2", notes: [note3])
         
         note1.notebook = notebook1
         note2.notebook = notebook1

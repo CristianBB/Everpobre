@@ -8,36 +8,36 @@
 
 import UIKit
 
-struct imageCoreData {
+struct imageCoreDataDummy {
     var objectid: String
     var image: UIImage
-    var position: CGRect
-    var scale: CGFloat
+    var originalFrame: String
+    var actualFrame: String
 }
 
-struct Note {
+struct NoteDummy {
     var title: String
     var creationDate: Date
     var endDate: Date
     var tags: [String]?
-    var images: [imageCoreData]?
+    var images: [imageCoreDataDummy]?
     var text: String
-    var notebook: Notebook?
+    var notebook: NotebookDummy?
 }
 
-struct Notebook {
+struct NotebookDummy {
     var name: String
-    var notes: [Note]
+    var notes: [NoteDummy]
 }
 
 
 class NotebooksViewController: UITableViewController {
 
     // MARK: - Properties
-    var model: [Notebook]
+    var model: [NotebookDummy]
     
     // MARK: - Initialization
-    init(model: [Notebook]) {
+    init(model: [NotebookDummy]) {
         self.model = model
         
         // Si se pasa nil en nibname, usará por defecto los que tengan el mismo nombre de la clase
