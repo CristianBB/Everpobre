@@ -102,26 +102,26 @@ extension NoteViewController {
             relativePoint = longPressGesture.location(in: longPressGesture.view)
             
             // Create UIAlertController
-            let actionSheetAlert = UIAlertController(title: NSLocalizedString("Add", comment: "Add an element to your Note"), message: nil, preferredStyle: .actionSheet)
+            let actionSheetAlert = UIAlertController(title: NSLocalizedString("Add", comment: ""), message: nil, preferredStyle: .actionSheet)
             
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             
             // Action for use Camera
-            let useCamera = UIAlertAction(title: "Camera", style: .default) { (alertAction) in
+            let useCamera = UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { (alertAction) in
                 imagePicker.sourceType = .camera
                 self.present(imagePicker, animated: true, completion: nil)
             }
             
             // Action for use Photo Library
-            let usePhotoLibrary = UIAlertAction(title: "Photo Library", style: .default) { (alertAction) in
+            let usePhotoLibrary = UIAlertAction(title: NSLocalizedString("Photo Library", comment: ""), style: .default) { (alertAction) in
                 imagePicker.sourceType = .photoLibrary
                 
                 self.present(imagePicker, animated: true, completion: nil)
             }
             
             // Action for use Location
-            let useLocation = UIAlertAction(title: "Location", style: .default) { (alertAction) in
+            let useLocation = UIAlertAction(title: NSLocalizedString("Location", comment: ""), style: .default) { (alertAction) in
                 let locationVC = LocationViewController()
                 locationVC.delegate = self
                 self.navigationController?.pushViewController(locationVC, animated: true)

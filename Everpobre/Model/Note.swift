@@ -8,7 +8,7 @@ open class Note: _Note {
         self.init(context: inContext)
         
         self.notebook = notebook
-        self.title = NSLocalizedString("New Note", comment: "New Note")
+        self.title = NSLocalizedString("New Note", comment: "")
         self.text = ""
         self.tags = ""
         self.creationDate = Date()

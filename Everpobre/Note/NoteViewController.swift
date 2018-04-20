@@ -135,8 +135,8 @@ class NoteViewController: UIViewController {
         
         // Configure titleTextField
         myView.addSubview(titleTextField)
-        titleTextField.placeholder = "Note Title"
-        titleTextField.title = "Title"
+        titleTextField.placeholder = NSLocalizedString("Note Title", comment: "")
+        titleTextField.title = NSLocalizedString("Title", comment: "")
         titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingChanged)
         titleTextField.backgroundColor = .cyan
 
@@ -161,8 +161,8 @@ class NoteViewController: UIViewController {
         
         // Configure endDate
         myView.addSubview(endDateTextField)
-        endDateTextField.placeholder = "Expiration Date"
-        endDateTextField.title = "Expiration Date"
+        endDateTextField.placeholder = NSLocalizedString("Expiration Date", comment: "")
+        endDateTextField.title = NSLocalizedString("Expiration Date", comment: "")
         endDateTextField.titleFont = UIFont(name: endDateTextField.titleFont.fontName, size: 10)!
         endDateTextField.font = UIFont(name: (endDateTextField.font?.fontName)!, size: 10)
         endDateTextField.addTarget(self, action: #selector(editingEndDateTextField), for: UIControlEvents.touchDown)
@@ -176,7 +176,7 @@ class NoteViewController: UIViewController {
         // Configure tagsTexTield
         myView.addSubview(tagsTexTield)
         tagsTexTield.font = .systemFont(ofSize: 10.0)
-        tagsTexTield.placeholder = "Tags"
+        tagsTexTield.placeholder = NSLocalizedString("Tags", comment: "")
         tagsTexTield.spaceBetweenTags = 3.0
         tagsTexTield.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tagsTexTield.tintColor = .green

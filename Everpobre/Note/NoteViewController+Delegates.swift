@@ -64,8 +64,8 @@ extension NoteViewController: NoteImageViewControllerDelegate {
     }
     
     func requestRemove(noteImageView: NoteImageViewController) {
-        let confirmation = UIAlertController(title: "Confirm", message: "Are you sure you want to delete this?", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+        let confirmation = UIAlertController(title: NSLocalizedString("Confirm", comment: ""), message: NSLocalizedString("Are you sure you want to delete this?", comment: ""), preferredStyle: .alert)
+        let ok = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) -> Void in
             // Delete from model
             CoreDataContainer.default.viewContext.delete(noteImageView.model)
             
@@ -83,7 +83,7 @@ extension NoteViewController: NoteImageViewControllerDelegate {
             })
             
         })
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel)
         
         confirmation.addAction(ok)
         confirmation.addAction(cancel)

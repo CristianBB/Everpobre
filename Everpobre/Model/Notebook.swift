@@ -13,7 +13,7 @@ open class Notebook: _Notebook {
     }
     
     convenience init(isDefaultNotebook:Bool, inContext: NSManagedObjectContext) {
-        self.init(isDefaultNotebook: isDefaultNotebook, name: NSLocalizedString("My Notebook", comment: "My Notebook"), inContext: inContext)
+        self.init(isDefaultNotebook: isDefaultNotebook, name: NSLocalizedString("My Notebook", comment: ""), inContext: inContext)
     }
     
 }

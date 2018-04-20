@@ -47,7 +47,7 @@ class NotebooksTableViewController: UITableViewController {
     
     init() {
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
-        title = "Notebooks"
+        title = NSLocalizedString("Notebooks", comment: "")
         
     }
     

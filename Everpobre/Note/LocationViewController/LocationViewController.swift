@@ -26,15 +26,15 @@ class LocationViewController: UIViewController {
     weak var delegate: LocationViewControllerDelegate?
     
     // MARK: - Search
-    private var searchController: UISearchController!
-    private var localSearchRequest: MKLocalSearchRequest!
-    private var localSearch: MKLocalSearch!
-    private var localSearchResponse: MKLocalSearchResponse!
+    var searchController: UISearchController!
+    var localSearchRequest: MKLocalSearchRequest!
+    var localSearch: MKLocalSearch!
+    var localSearchResponse: MKLocalSearchResponse!
     
     // MARK: - Map variables
-    private var annotation: MKAnnotation!
-    private var locationManager: CLLocationManager!
-    private var isCurrentLocation: Bool = false
+    var annotation: MKAnnotation!
+    var locationManager: CLLocationManager!
+    var isCurrentLocation: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +50,7 @@ class LocationViewController: UIViewController {
         currentPosition.layer.cornerRadius = currentPosition.frame.width / 2
         
         // Bar Button
-        let addImageButton = UIBarButtonItem(title: "Add", style: .plain, target: self, action: #selector(addImageButtonClicked))
+        let addImageButton = UIBarButtonItem(title: NSLocalizedString("Add", comment: ""), style: .plain, target: self, action: #selector(addImageButtonClicked))
         navigationItem.rightBarButtonItem = addImageButton
         
         mapView.delegate = self

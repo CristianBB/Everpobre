@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
 // MARK: - UISearchBarDelegate
 extension LocationViewController: UISearchBarDelegate {
@@ -27,7 +29,7 @@ extension LocationViewController: UISearchBarDelegate {
         localSearch.start { [weak self] (localSearchResponse, error) -> Void in
             
             if localSearchResponse == nil {
-                let alert = UIAlertController(title: nil, message: "Place not found", preferredStyle: .alert)
+                let alert = UIAlertController(title: nil, message: NSLocalizedString("Place not found", comment: ""), preferredStyle: .alert)
                 self?.present(alert, animated: true, completion: nil)
                 
                 return
