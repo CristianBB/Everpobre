@@ -5,9 +5,9 @@ import Foundation
 import CoreData
 
 public enum NoteImageAttributes: String {
-    case image = "image"
-    case position = "position"
-    case scale = "scale"
+    case actualFrameString = "actualFrameString"
+    case imageData = "imageData"
+    case originalFrameString = "originalFrameString"
 }
 
 public enum NoteImageRelationships: String {
@@ -40,13 +40,13 @@ open class _NoteImage: NSManagedObject {
     // MARK: - Properties
 
     @NSManaged open
-    var image: NSData
+    var actualFrameString: String
 
     @NSManaged open
-    var position: String
+    var imageData: NSData
 
     @NSManaged open
-    var scale: String
+    var originalFrameString: String
 
     // MARK: - Relationships
 

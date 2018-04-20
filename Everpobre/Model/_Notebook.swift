@@ -6,7 +6,7 @@ import CoreData
 
 public enum NotebookAttributes: String {
     case creationDate = "creationDate"
-    case isDefault = "isDefault"
+    case defaultNotebook = "defaultNotebook"
     case name = "name"
 }
 
@@ -43,7 +43,7 @@ open class _Notebook: NSManagedObject {
     var creationDate: Date
 
     @NSManaged open
-    var isDefault: NSNumber?
+    var defaultNotebook: NSNumber?
 
     @NSManaged open
     var name: String

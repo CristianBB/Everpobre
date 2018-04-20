@@ -10,17 +10,32 @@ import UIKit
 import SkyFloatingLabelTextField
 import WSTagsField
 
+// MARK: - Delegate Protocol
+protocol NoteViewControllerDelegate: class {
+    func didChange(note: Note, type:typeOfNoteChange)
+}
+
 enum longPressGestureActive:String {
-    case noActive = "noActive"
-    case imagePressed = "imagePressed"
-    case notePressed = "notePressed"
-    case editImage = "editImage"
+    case noActive
+    case imagePressed
+    case notePressed
+    case editImage
+}
+
+enum typeOfNoteChange: String {
+    case title
+    case notebook
+    case expirationDate
+    case tags
+    case text
+    case images
 }
 
 class NoteViewController: UIViewController {
 
     // MARK: - Properties
-    var model: NoteDummy
+    var model: Note
+    weak var delegate: NoteViewControllerDelegate?
 
     // MARK: - UI Components
     let titleTextField = SkyFloatingLabelTextField()
@@ -31,10 +46,10 @@ class NoteViewController: UIViewController {
     
     var relativePoint: CGPoint!
     var gestureActive: longPressGestureActive = .noActive
-    var imageEdited:NoteImageView?
+    var imageEdited:NoteImageViewController?
     
     // MARK: - Initialization
-    init(model: NoteDummy) {
+    init(model: Note) {
         self.model = model
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
         
@@ -69,13 +84,22 @@ class NoteViewController: UIViewController {
         twoTapGesture.numberOfTapsRequired = 2
         noteTextView.addGestureRecognizer(twoTapGesture)
         
-        // tagsTexTield Events
         tagsTexTield.onDidAddTag = { (_,_) in
-            print("DidAddTag")
+            var tagsString = ""
+            for tag in self.tagsTexTield.tags {
+                tagsString += "\(tag.text),"
+            }
+            self.model.tags = tagsString
+            self.delegate?.didChange(note: self.model, type: .tags)
         }
         
         tagsTexTield.onDidRemoveTag = { (_,_) in
-            print("DidRemoveTag")
+            var tagsString = ""
+            for tag in self.tagsTexTield.tags {
+                tagsString += "\(tag.text),"
+            }
+            self.model.tags = tagsString
+            self.delegate?.didChange(note: self.model, type: .tags)
         }
     }
     
@@ -86,7 +110,7 @@ class NoteViewController: UIViewController {
         
         // Iterate subviews on noteTextView
         for subview in noteTextView.subviews {
-            if let noteImageView = subview as? NoteImageView {
+            if let noteImageView = subview as? NoteImageViewController {
                 noteImageView.fixFramePositionIn(noteTextView)
                 
                 // Apply exclusionPaths
@@ -110,8 +134,9 @@ class NoteViewController: UIViewController {
         myView.addSubview(titleTextField)
         titleTextField.placeholder = "Note Title"
         titleTextField.title = "Title"
+        titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingChanged)
         titleTextField.backgroundColor = .cyan
-        
+
         titleTextField.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         titleTextField.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
         titleTextField.topAnchor.constraint(equalTo: myView.topAnchor, constant: 40).isActive = true
@@ -123,6 +148,7 @@ class NoteViewController: UIViewController {
         notebookLabel.title = "Notebook"
         notebookLabel.titleFont = UIFont(name: notebookLabel.titleFont.fontName, size: 10)!
         notebookLabel.font = UIFont(name: (notebookLabel.font?.fontName)!, size: 10)
+        notebookLabel.isUserInteractionEnabled = false
         notebookLabel.backgroundColor = .blue
         
         notebookLabel.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
@@ -147,7 +173,6 @@ class NoteViewController: UIViewController {
         // Configure tagsTexTield
         myView.addSubview(tagsTexTield)
         tagsTexTield.font = .systemFont(ofSize: 10.0)
-        //tagsTexTield.delimiter = ","
         tagsTexTield.placeholder = "Tags"
         tagsTexTield.spaceBetweenTags = 3.0
         tagsTexTield.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -165,6 +190,7 @@ class NoteViewController: UIViewController {
         
         // Configure noteTextView
         myView.addSubview(noteTextView)
+        noteTextView.delegate = self
         noteTextView.backgroundColor = .yellow
         noteTextView.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
@@ -178,7 +204,7 @@ class NoteViewController: UIViewController {
         
         // Remove NoteImageViews in noteTextView
         for subview in noteTextView.subviews {
-            if let imageView = subview as? NoteImageView {
+            if let imageView = subview as? NoteImageViewController {
                 imageView.removeFromSuperview()
             }
         }
@@ -188,253 +214,33 @@ class NoteViewController: UIViewController {
         dateFormatter.dateFormat = "dd/MM/yyyy hh:mm a"
         
         titleTextField.text = model.title
-        notebookLabel.text = model.notebook?.name
+        notebookLabel.text = model.notebook.name
         endDateTextField.text = dateFormatter.string(from: model.endDate)
-        if let tags = model.tags {
-            for tag in tags {
+        let arrTags = model.tags.components(separatedBy: ",")
+        for tag in arrTags {
+            if (tag != "") {
                 tagsTexTield.addTag(tag)
             }
         }
         
         noteTextView.text = model.text
         
-        guard let imageCoreDataDummy = model.images else { return }
-        for imageAct in imageCoreDataDummy {
-            addImageToView(imageAct)
+        let modelImages = model.images.allObjects as! [NoteImage]
+        for noteImageAct in modelImages {
+            addImageToView(noteImageAct)
         }
+        
     }
     
     // Add an image inside noteTextView
-    func addImageToView(_ image: imageCoreDataDummy) {
-        let noteImageView = NoteImageView(model: image)
-        noteImageView.delegate = self
+    func addImageToView(_ image: NoteImage) {
+        let noteImageView = NoteImageViewController(model: image)
+        noteImageView.delegate = self as NoteImageViewControllerDelegate
         noteTextView.addSubview(noteImageView)
     }
     
-    // Instead of keyboard for endDate edition, we'll use DatePicker
-    @objc func editingEndDateTextField(textField: UITextField) {
-        let datePickerView = UIDatePicker()
-        datePickerView.datePickerMode = UIDatePickerMode.dateAndTime
-        datePickerView.locale = Locale.current
-        datePickerView.date = model.endDate
-        textField.inputView = datePickerView
-        
-        datePickerView.addTarget(self, action: #selector(datePickerValueChanged), for: UIControlEvents.valueChanged)
-    }
-    
-    // Update endDate from Model and Sync View
-    @objc func datePickerValueChanged(datePicker:UIDatePicker) {
-        model.endDate = datePicker.date
-        syncModelWithView()
-    }
-
 }
 
-// MARK: - Gestures
-extension NoteViewController {
-    
-    // Swipe Down View: Close keyboard/datepicker
-    @objc func closeKeyboard() {
-        if (titleTextField.isFirstResponder) {
-            titleTextField.resignFirstResponder()
-        } else if (endDateTextField.isFirstResponder) {
-            endDateTextField.resignFirstResponder()
-        } else if (tagsTexTield.isEditing) {
-            tagsTexTield.endEditing()
-        } else if (noteTextView.isFirstResponder) {
-            noteTextView.resignFirstResponder()
-        }
-    }
-    
-    // DoubleTapGesture: Initialize image edition mode
-    @objc func doubleTapGesture(tapGesture:UITapGestureRecognizer) {
-        
-        // Check if gesture was released on a UIImageView
-        for subview in noteTextView.subviews {
-            if let noteImageView = subview as? NoteImageView {
-                if (noteImageView.frame.contains(tapGesture.location(in: noteTextView))) {
-                    
-                    // Activate Edition Mode
-                    if (gestureActive == .noActive) {
-                        noteImageView.activateEditionMode()
-                        
-                        gestureActive = .editImage
-                        imageEdited = noteImageView
-                        return
-                        
-                    // Deactivate Edition Mode
-                    } else if (imageEdited == noteImageView) {
-                        deactivateEdition()
-                        return
-                    }
-
-                }
-            }
-        }
-    }
-    
-    
-    // Deactivate any pending gesture action
-    func deactivateEdition() {
-        if (gestureActive == .editImage) {
-            imageEdited?.deactivateEditionMode()
-            gestureActive = .noActive
-        }
-    }
-    
-    // LongPressGesture
-    @objc func longPressGesture(longPressGesture:UILongPressGestureRecognizer) {
-        
-        if (gestureActive == .noActive) {
-            // Check if gesture was released on a UIImageView
-            for subview in noteTextView.subviews {
-                if let noteImageView = subview as? NoteImageView {
-                    if (noteImageView.frame.contains(longPressGesture.location(in: noteTextView))) {
-                        gestureActive = .imagePressed
-                        imageEdited = noteImageView
-                    }
-                }
-            }
-            
-            // If not, Check if gesture was released on noteTextView
-            if (gestureActive == .noActive && noteTextView.frame.contains(longPressGesture.location(in: longPressGesture.view))) {
-                gestureActive = .notePressed
-            }
-        }
-        
-        if (gestureActive == .imagePressed) {
-            if (longPressGesture.state == .began) { closeKeyboard() }
-            if (longPressGesture.state == .ended || longPressGesture.state == .cancelled) { gestureActive = .noActive }
-            imageEdited?.moveImage(longPressGesture: longPressGesture, contextView: noteTextView)
-        } else if (gestureActive == .notePressed) {
-            addElement(longPressGesture: longPressGesture)
-        }
-        
-    }
-    
-    // LongPressGesture on noteTextView: User selects and action for element addition
-    func addElement(longPressGesture:UILongPressGestureRecognizer) {
-        
-        if (longPressGesture.state == .began) {
-            // Save longPressGesture position for positioning image
-            relativePoint = longPressGesture.location(in: longPressGesture.view)
-            
-            // Create UIAlertController
-            let actionSheetAlert = UIAlertController(title: NSLocalizedString("Add", comment: "Add an element to your Note"), message: nil, preferredStyle: .actionSheet)
-            
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            
-            // Action for use Camera
-            let useCamera = UIAlertAction(title: "Camera", style: .default) { (alertAction) in
-                imagePicker.sourceType = .camera
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            
-            // Action for use Photo Library
-            let usePhotoLibrary = UIAlertAction(title: "Photo Library", style: .default) { (alertAction) in
-                imagePicker.sourceType = .photoLibrary
-                
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            
-            // Action for use Location
-            let useLocation = UIAlertAction(title: "Location", style: .default) { (alertAction) in
-                imagePicker.sourceType = .photoLibrary
-                self.present(imagePicker, animated: true, completion: nil)
-            }
-            
-            let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: nil)
-            
-            actionSheetAlert.addAction(useCamera)
-            actionSheetAlert.addAction(usePhotoLibrary)
-            actionSheetAlert.addAction(useLocation)
-            actionSheetAlert.addAction(cancel)
-            
-            present(actionSheetAlert, animated: true, completion: nil)
-        
-        } else if (longPressGesture.state == .ended || longPressGesture.state == .cancelled) {
-            gestureActive = .noActive
-        }
-     
-    }
-    
-    @objc func addLocation()
-    {
-        
-    }
-    
-}
-
-// MARK: - ImagePickerControllerDelegate
-extension NoteViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            
-            // scale image to width=200 respecting aspect ratio
-            let targetWidth: CGFloat = 150.0
-            let scaleFactor = targetWidth / image.size.width
-            let targetHeight = image.size.height * scaleFactor
-            let targetSize = CGSize(width: targetWidth, height: targetHeight)
-            let rect = CGRect(x: 0.0, y: 0.0, width: targetSize.width, height: targetSize.height)
-            UIGraphicsBeginImageContextWithOptions(targetSize, false, 1.0)
-            image.draw(in: rect)
-            let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            let locationY = relativePoint.y
-            let locationX = relativePoint.x
-            let newPosition = CGRect(x: locationX, y: locationY, width: targetWidth, height: targetHeight)
-            
-            // Add image
-            let imageAdded = imageCoreDataDummy(objectid: "5", image: scaledImage!, originalFrame: NSStringFromCGRect(newPosition), actualFrame: NSStringFromCGRect(newPosition))
-            model.images?.append(imageAdded)
-            addImageToView(imageAdded)
-        }
-        
-        picker.dismiss(animated: true, completion: nil)
-    }
-}
-
-// MARK: - NoteImageViewDelegate
-extension NoteViewController: NoteImageViewDelegate {
-    func didMove() {
-        view.setNeedsLayout()
-    }
-    
-    func didRotate() {
-        view.setNeedsLayout()
-    }
-    
-    func didScale() {
-        view.setNeedsLayout()
-    }
-    
-    func requestRemove(noteImageView: NoteImageView) {
-        let confirmation = UIAlertController(title: "Confirm", message: "Are you sure you want to delete this?", preferredStyle: .alert)
-        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            // CBB AQUI
-            self.model.images.inde
-            // Delete from model
-            for index in 0..<self.model.images!.count {
-                if (self.model.images![index].objectid == self.imageEdited?.accessibilityIdentifier) {
-                    self.model.images?.remove(at: index)
-                }
-            }
-            self.deactivateEdition()
-            self.syncModelWithView()
-        })
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
-        
-        confirmation.addAction(ok)
-        confirmation.addAction(cancel)
-        
-        self.present(confirmation, animated: true, completion: nil)
-    }
-    
-    
-}
 
 
 
