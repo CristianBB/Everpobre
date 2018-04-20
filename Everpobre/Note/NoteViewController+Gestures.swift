@@ -27,36 +27,40 @@ extension NoteViewController {
     // DoubleTapGesture: Initialize image edition mode
     @objc func doubleTapGesture(tapGesture:UITapGestureRecognizer) {
         
-        // Check if gesture was released on a UIImageView
+        // Check if gesture was released on a NoteImageViewController, iterate until last subview cause we want the last NoteImageViewController
+        var imageViewFound: NoteImageViewController?
         for subview in noteTextView.subviews {
             if let noteImageView = subview as? NoteImageViewController {
                 if (noteImageView.frame.contains(tapGesture.location(in: noteTextView))) {
-                    
-                    // Activate Edition Mode
-                    if (gestureActive == .noActive) {
-                        noteImageView.activateEditionMode()
-                        
-                        gestureActive = .editImage
-                        imageEdited = noteImageView
-                        return
-                        
-                        // Deactivate Edition Mode
-                    } else if (imageEdited == noteImageView) {
-                        deactivateEdition()
-                        return
-                    }
-                    
+                    imageViewFound = noteImageView
                 }
             }
         }
+        
+        if let imageViewFound = imageViewFound {
+            // Activate Edition Mode
+            if (gestureActive == .noActive) {
+                imageViewFound.activateEditionMode()
+                
+                gestureActive = .editImage
+                imageEdited = imageViewFound
+                noteTextView.isScrollEnabled = false
+                return
+                
+                // Deactivate Edition Mode
+            } else if (imageEdited == imageViewFound) {
+                deactivateEdition()
+                return
+            }
+        }
     }
-    
     
     // Deactivate any pending gesture action
     func deactivateEdition() {
         if (gestureActive == .editImage) {
             imageEdited?.deactivateEditionMode()
             gestureActive = .noActive
+            noteTextView.isScrollEnabled = true
         }
     }
     
@@ -64,7 +68,7 @@ extension NoteViewController {
     @objc func longPressGesture(longPressGesture:UILongPressGestureRecognizer) {
         
         if (gestureActive == .noActive) {
-            // Check if gesture was released on a UIImageView
+            // Check if gesture was released on a NoteImageViewController
             for subview in noteTextView.subviews {
                 if let noteImageView = subview as? NoteImageViewController {
                     if (noteImageView.frame.contains(longPressGesture.location(in: noteTextView))) {
@@ -75,7 +79,7 @@ extension NoteViewController {
             }
             
             // If not, Check if gesture was released on noteTextView
-            if (gestureActive == .noActive && noteTextView.frame.contains(longPressGesture.location(in: longPressGesture.view))) {
+                if (gestureActive == .noActive && noteTextView.frame.contains(longPressGesture.location(in: self.view))) {
                 gestureActive = .notePressed
             }
         }
@@ -94,7 +98,7 @@ extension NoteViewController {
     func addElement(longPressGesture:UILongPressGestureRecognizer) {
         
         if (longPressGesture.state == .began) {
-            // Save longPressGesture position for positioning image
+            // Save longPressGesture position for image positioning
             relativePoint = longPressGesture.location(in: longPressGesture.view)
             
             // Create UIAlertController
@@ -118,8 +122,9 @@ extension NoteViewController {
             
             // Action for use Location
             let useLocation = UIAlertAction(title: "Location", style: .default) { (alertAction) in
-                imagePicker.sourceType = .photoLibrary
-                self.present(imagePicker, animated: true, completion: nil)
+                let locationVC = LocationViewController()
+                locationVC.delegate = self
+                self.navigationController?.pushViewController(locationVC, animated: true)
             }
             
             let cancel = UIAlertAction(title: NSLocalizedString("Cancel", comment: "Cancel"), style: .destructive, handler: nil)
@@ -134,11 +139,6 @@ extension NoteViewController {
         } else if (longPressGesture.state == .ended || longPressGesture.state == .cancelled) {
             gestureActive = .noActive
         }
-        
-    }
-    
-    @objc func addLocation()
-    {
         
     }
     

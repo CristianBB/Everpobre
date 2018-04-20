@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LocationViewController" customModule="Everpobre" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="gp5-6P-aq2" id="dde-T0-iv3"/>
+                <outlet property="currentPosition" destination="UKz-MB-cFk" id="baZ-vu-71l"/>
+                <outlet property="mapView" destination="cEj-cC-ubI" id="YpJ-gZ-i6E"/>
+                <outlet property="search" destination="joX-2p-UbX" id="phL-Mj-e25"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <searchBar contentMode="redraw" horizontalHuggingPriority="248" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" searchBarStyle="minimal" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="joX-2p-UbX">
+                    <rect key="frame" x="8" y="28" width="321" height="56"/>
+                    <textInputTraits key="textInputTraits" textContentType="location"/>
+                    <scopeButtonTitles>
+                        <string>Title</string>
+                        <string>Title</string>
+                    </scopeButtonTitles>
+                </searchBar>
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="752" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UKz-MB-cFk">
+                    <rect key="frame" x="337" y="38" width="30" height="30"/>
+                    <color key="backgroundColor" red="0.12432840891925401" green="0.073286498169504277" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="hbU-cp-o13"/>
+                        <constraint firstAttribute="height" constant="30" id="v7E-ge-fzp"/>
+                    </constraints>
+                    <state key="normal" image="gpsFixed.png"/>
+                    <connections>
+                        <action selector="currentPosition:" destination="-1" eventType="touchUpInside" id="bjk-Ea-zJR"/>
+                    </connections>
+                </button>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cEj-cC-ubI">
+                    <rect key="frame" x="8" y="88" width="359" height="571"/>
+                </mapView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="gp5-6P-aq2">
+                    <rect key="frame" x="169" y="355" width="37" height="37"/>
+                    <color key="color" red="0.11130378719117617" green="0.053121566096682171" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="joX-2p-UbX" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="65r-xH-1HV"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="UKz-MB-cFk" secondAttribute="trailing" constant="8" id="BOg-88-0by"/>
+                <constraint firstItem="cEj-cC-ubI" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="8" id="RL4-Am-gFO"/>
+                <constraint firstItem="joX-2p-UbX" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="8" id="TPK-wE-Anx"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="cEj-cC-ubI" secondAttribute="bottom" constant="8" id="UMb-02-LnB"/>
+                <constraint firstItem="gp5-6P-aq2" firstAttribute="centerX" secondItem="cEj-cC-ubI" secondAttribute="centerX" id="Wal-RO-Y6V"/>
+                <constraint firstItem="UKz-MB-cFk" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="18" id="c0i-wt-SPE"/>
+                <constraint firstItem="UKz-MB-cFk" firstAttribute="leading" secondItem="joX-2p-UbX" secondAttribute="trailing" constant="8" id="kna-DX-5OU"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="cEj-cC-ubI" secondAttribute="trailing" constant="8" id="l19-il-kXT"/>
+                <constraint firstItem="gp5-6P-aq2" firstAttribute="centerY" secondItem="cEj-cC-ubI" secondAttribute="centerY" id="mjx-ej-dLW"/>
+                <constraint firstItem="cEj-cC-ubI" firstAttribute="top" secondItem="joX-2p-UbX" secondAttribute="bottom" constant="4" id="xnU-3o-4V0"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="33.5" y="53.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="gpsFixed.png" width="24" height="24"/>
+    </resources>
+</document>

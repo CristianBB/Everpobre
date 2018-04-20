@@ -8,14 +8,13 @@
 
 import UIKit
 
-
 // MARK: - ImagePickerControllerDelegate
 extension NoteViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             
-            // scale image to width=200 respecting aspect ratio
+            // scale image to width=150 respecting aspect ratio
             let targetWidth: CGFloat = 150.0
             let scaleFactor = targetWidth / image.size.width
             let targetHeight = image.size.height * scaleFactor
@@ -90,6 +89,22 @@ extension NoteViewController: NoteImageViewControllerDelegate {
         confirmation.addAction(cancel)
         
         self.present(confirmation, animated: true, completion: nil)
+    }
+    
+}
+
+// MARK: - LocationViewControllerDelegate
+extension NoteViewController: LocationViewControllerDelegate {
+    func addImageLocation(image: UIImage) {
+        
+        // Create position for Location Image based on position where user pressed
+        let locationY = relativePoint.y
+        let locationX = relativePoint.x
+        let newPosition = CGRect(x: locationX, y: locationY, width: image.size.width, height: image.size.height)
+        
+        // Add image
+        let imageAdded = NoteImage(image: image, positionFrame: newPosition, note: model, inContext: CoreDataContainer.default.viewContext)
+        addImageToView(imageAdded)
     }
     
     

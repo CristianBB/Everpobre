@@ -20,6 +20,9 @@
 		409A32A6208A063B0032F881 /* NoteViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32A5208A063B0032F881 /* NoteViewController+Gestures.swift */; };
 		409A32A8208A06B80032F881 /* NoteViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32A7208A06B80032F881 /* NoteViewController+Delegates.swift */; };
 		409A32AA208A07670032F881 /* NoteImageViewController+Gestures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32A9208A07670032F881 /* NoteImageViewController+Gestures.swift */; };
+		409A32AE208A0C0D0032F881 /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32AC208A0C0D0032F881 /* LocationViewController.swift */; };
+		409A32AF208A0C0D0032F881 /* LocationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 409A32AD208A0C0D0032F881 /* LocationViewController.xib */; };
+		409A32B1208A29D20032F881 /* gpsFixed.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32B0208A29D20032F881 /* gpsFixed.png */; };
 		409D5BB32078E0A000690C4B /* NotebooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB22078E0A000690C4B /* NotebooksTableViewController.swift */; };
 		409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB42078E94E00690C4B /* NoteViewController.swift */; };
 		409D5BBB207A245000690C4B /* SkyFloatingLabelTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */; };
@@ -62,6 +65,9 @@
 		409A32A5208A063B0032F881 /* NoteViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteViewController+Gestures.swift"; sourceTree = "<group>"; };
 		409A32A7208A06B80032F881 /* NoteViewController+Delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteViewController+Delegates.swift"; sourceTree = "<group>"; };
 		409A32A9208A07670032F881 /* NoteImageViewController+Gestures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteImageViewController+Gestures.swift"; sourceTree = "<group>"; };
+		409A32AC208A0C0D0032F881 /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		409A32AD208A0C0D0032F881 /* LocationViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationViewController.xib; sourceTree = "<group>"; };
+		409A32B0208A29D20032F881 /* gpsFixed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gpsFixed.png; sourceTree = "<group>"; };
 		409D5BB22078E0A000690C4B /* NotebooksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksTableViewController.swift; sourceTree = "<group>"; };
 		409D5BB42078E94E00690C4B /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyFloatingLabelTextField.framework; path = Carthage/Build/iOS/SkyFloatingLabelTextField.framework; sourceTree = "<group>"; };
@@ -118,9 +124,9 @@
 		4011D5DD2051CED100D3B262 /* Everpobre */ = {
 			isa = PBXGroup;
 			children = (
+				409A32B2208A29E20032F881 /* Assets */,
 				4028E5DB2088E1E600C3812D /* UIKitExtensions */,
 				4028E5D62088DEA900C3812D /* Instructions */,
-				409E2E7F208534EA00BDB7EB /* imagencita.png */,
 				409E2E7B2085156E00BDB7EB /* Notebook */,
 				409E2E7A2085156400BDB7EB /* Note */,
 				4030A7FC205717DB00AFE359 /* Model */,
@@ -173,6 +179,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		409A32AB208A0BEF0032F881 /* LocationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				409A32AC208A0C0D0032F881 /* LocationViewController.swift */,
+				409A32AD208A0C0D0032F881 /* LocationViewController.xib */,
+			);
+			path = LocationViewController;
+			sourceTree = "<group>";
+		};
+		409A32B2208A29E20032F881 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				409E2E7F208534EA00BDB7EB /* imagencita.png */,
+				409A32B0208A29D20032F881 /* gpsFixed.png */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		409D5BB9207A245000690C4B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +209,7 @@
 		409E2E7A2085156400BDB7EB /* Note */ = {
 			isa = PBXGroup;
 			children = (
+				409A32AB208A0BEF0032F881 /* LocationViewController */,
 				409E2E7E208516EA00BDB7EB /* NoteImageViewController */,
 				409D5BB42078E94E00690C4B /* NoteViewController.swift */,
 				409A32A3208A06050032F881 /* NoteViewController+Events.swift */,
@@ -298,7 +323,9 @@
 				4011D5FF2051CF2A00D3B262 /* Launch Screen.storyboard in Resources */,
 				4011D5E62051CED100D3B262 /* Assets.xcassets in Resources */,
 				409E2E80208534EA00BDB7EB /* imagencita.png in Resources */,
+				409A32AF208A0C0D0032F881 /* LocationViewController.xib in Resources */,
 				4028E5DA2088DED900C3812D /* InstructionsViewController.xib in Resources */,
+				409A32B1208A29D20032F881 /* gpsFixed.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +370,7 @@
 				40A025B920879500009B74DF /* Notebook.swift in Sources */,
 				40A025B820879500009B74DF /* Note.swift in Sources */,
 				409A32AA208A07670032F881 /* NoteImageViewController+Gestures.swift in Sources */,
+				409A32AE208A0C0D0032F881 /* LocationViewController.swift in Sources */,
 				40A025BD20879500009B74DF /* _Note.swift in Sources */,
 				40577A06208777E90075E2BE /* CoreDataContainer.swift in Sources */,
 				40A025BC20879500009B74DF /* NoteImage.swift in Sources */,

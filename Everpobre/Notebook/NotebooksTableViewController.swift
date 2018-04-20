@@ -183,7 +183,8 @@ extension NotebooksTableViewController {
         let noteVC = NoteViewController(model: note)
         noteVC.delegate = self
         
-        self.splitViewController?.showDetailViewController(noteVC, sender: self)
+        let navVC = UINavigationController(rootViewController: noteVC)
+        self.splitViewController?.showDetailViewController(navVC, sender: self)
     }
 
 }

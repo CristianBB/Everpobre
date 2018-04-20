@@ -76,8 +76,8 @@ class NoteViewController: UIViewController {
         view.addGestureRecognizer(swipeGesture)
         
         // noteTextView Gesture - LongPress
-        let moveGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressGesture))
-        noteTextView.addGestureRecognizer(moveGesture)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressGesture))
+        noteTextView.addGestureRecognizer(longPress)
         
         // noteTextView Gesture - Double Tap
         let twoTapGesture = UITapGestureRecognizer(target: self, action: #selector(doubleTapGesture))
@@ -121,14 +121,17 @@ class NoteViewController: UIViewController {
     }
     
     func setupUI() {
+        guard let myView = view else { return }
+        
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         notebookLabel.translatesAutoresizingMaskIntoConstraints = false
         endDateTextField.translatesAutoresizingMaskIntoConstraints = false
         tagsTexTield.translatesAutoresizingMaskIntoConstraints = false
         noteTextView.translatesAutoresizingMaskIntoConstraints = false
         
-        let myView = UIView()
+        // Main View
         myView.backgroundColor = .white
+        let guide = myView.safeAreaLayoutGuide
         
         // Configure titleTextField
         myView.addSubview(titleTextField)
@@ -137,9 +140,9 @@ class NoteViewController: UIViewController {
         titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingChanged)
         titleTextField.backgroundColor = .cyan
 
-        titleTextField.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
-        titleTextField.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
-        titleTextField.topAnchor.constraint(equalTo: myView.topAnchor, constant: 40).isActive = true
+        titleTextField.leftAnchor.constraint(equalTo: guide.leftAnchor, constant: 8).isActive = true
+        titleTextField.rightAnchor.constraint(equalTo: guide.rightAnchor, constant: -8).isActive = true
+        titleTextField.topAnchor.constraint(equalTo: guide.topAnchor, constant: 8).isActive = true
         titleTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         // Configure notebookLabel
