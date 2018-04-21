@@ -38,9 +38,15 @@ extension NoteViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
 }
 
-// MARK: -
+// MARK: - UIPickerViewDelegate
 extension NoteViewController: UIPickerViewDelegate {
-    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        notebookSky.text = pickOptions[row].name
+        self.model.notebook = pickOptions[row]
+        
+        // Notify Delegate
+        self.delegate?.didChange(note: self.model, type: .notebook)
+    }
 }
 
 // MARK: - NoteTextViewDelegate

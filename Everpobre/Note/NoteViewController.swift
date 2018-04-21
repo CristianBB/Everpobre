@@ -36,10 +36,12 @@ class NoteViewController: UIViewController {
     // MARK: - Properties
     var model: Note
     weak var delegate: NoteViewControllerDelegate?
+    var pickOptions:[Notebook] = []
 
     // MARK: - UI Components
     let titleTextField = SkyFloatingLabelTextField()
     let notebookSky = SkyFloatingLabelTextField()
+    let notebookPickerView = UIPickerView()
     let endDateSky = SkyFloatingLabelTextField()
     let tagsWST = WSTagsField()
     let noteTextView = UITextView()
@@ -69,6 +71,8 @@ class NoteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.loadPickOptions()
         
         // View Gesture - Swipe Down
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(closeKeyboard))
@@ -145,31 +149,30 @@ class NoteViewController: UIViewController {
         titleTextField.topAnchor.constraint(equalTo: guide.topAnchor, constant: 8).isActive = true
         titleTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        // Configure notebookLabel
+        // Configure notebookSky
         myView.addSubview(notebookSky)
         notebookSky.placeholder = "Notebook"
         notebookSky.title = "Notebook"
         notebookSky.titleFont = UIFont(name: notebookSky.titleFont.fontName, size: 10)!
         notebookSky.font = UIFont(name: (notebookSky.font?.fontName)!, size: 10)
-        notebookSky.isUserInteractionEnabled = false
+        notebookSky.addTarget(self, action: #selector(loadPickOptions), for: .touchDown)
         notebookSky.backgroundColor = .blue
         
-        let pickerView = UIPickerView()
-        pickerView.delegate = self
-        notebookSky.inputView = pickerView
+        notebookPickerView.delegate = self
+        notebookSky.inputView = notebookPickerView
         
         notebookSky.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         notebookSky.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 4).isActive = true
         notebookSky.widthAnchor.constraint(equalToConstant: 110).isActive = true
         notebookSky.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
-        // Configure endDate
+        // Configure endDateSky
         myView.addSubview(endDateSky)
         endDateSky.placeholder = NSLocalizedString("Expiration Date", comment: "")
         endDateSky.title = NSLocalizedString("Expiration Date", comment: "")
         endDateSky.titleFont = UIFont(name: endDateSky.titleFont.fontName, size: 10)!
         endDateSky.font = UIFont(name: (endDateSky.font?.fontName)!, size: 10)
-        endDateSky.addTarget(self, action: #selector(editingEndDateTextField), for: UIControlEvents.touchDown)
+        endDateSky.addTarget(self, action: #selector(editingEndDateTextField), for: .touchDown)
         endDateSky.backgroundColor = .red
         
         endDateSky.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
@@ -177,7 +180,7 @@ class NoteViewController: UIViewController {
         endDateSky.widthAnchor.constraint(equalTo: notebookSky.widthAnchor).isActive = true
         endDateSky.heightAnchor.constraint(equalTo: notebookSky.heightAnchor).isActive = true
     
-        // Configure tagsTexTield
+        // Configure tagsWST
         myView.addSubview(tagsWST)
         tagsWST.font = .systemFont(ofSize: 10.0)
         tagsWST.placeholder = NSLocalizedString("Tags", comment: "")
@@ -248,6 +251,17 @@ class NoteViewController: UIViewController {
         
     }
     
+    // Get Notebooks to define pick options for notebookPickerView
+    @objc func loadPickOptions() {
+        // Get all Notebooks
+        let req = Notebook.fetchRequest()
+        req.fetchBatchSize = 50
+        guard let results = try? CoreDataContainer.default.viewContext.fetch(req) as! [Notebook] else {return}
+    
+        self.pickOptions = results
+        self.notebookPickerView.reloadAllComponents()
+        
+    }
 }
 
 

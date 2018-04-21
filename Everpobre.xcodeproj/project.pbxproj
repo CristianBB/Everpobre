@@ -48,6 +48,7 @@
 		40A025BB20879500009B74DF /* _NoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B520879500009B74DF /* _NoteImage.swift */; };
 		40A025BC20879500009B74DF /* NoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B620879500009B74DF /* NoteImage.swift */; };
 		40A025BD20879500009B74DF /* _Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B720879500009B74DF /* _Note.swift */; };
+		40F7E9D5208BD91D0078A218 /* NoteViewController+Datasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F7E9D4208BD91D0078A218 /* NoteViewController+Datasource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		40A025B520879500009B74DF /* _NoteImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _NoteImage.swift; sourceTree = "<group>"; };
 		40A025B620879500009B74DF /* NoteImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteImage.swift; sourceTree = "<group>"; };
 		40A025B720879500009B74DF /* _Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _Note.swift; sourceTree = "<group>"; };
+		40F7E9D4208BD91D0078A218 /* NoteViewController+Datasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteViewController+Datasource.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +261,7 @@
 				409A32A3208A06050032F881 /* NoteViewController+Events.swift */,
 				409A32A5208A063B0032F881 /* NoteViewController+Gestures.swift */,
 				409A32A7208A06B80032F881 /* NoteViewController+Delegates.swift */,
+				40F7E9D4208BD91D0078A218 /* NoteViewController+Datasource.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				40A025BD20879500009B74DF /* _Note.swift in Sources */,
 				40577A06208777E90075E2BE /* CoreDataContainer.swift in Sources */,
 				40A025BC20879500009B74DF /* NoteImage.swift in Sources */,
+				40F7E9D5208BD91D0078A218 /* NoteViewController+Datasource.swift in Sources */,
 				40264E302088034400F0E256 /* Everpobre.xcdatamodeld in Sources */,
 				4028E5DD2088E21300C3812D /* UISplitViewController+Additions.swift in Sources */,
 				409A32C3208B8F3D0032F881 /* NotebookHeader.swift in Sources */,
