@@ -60,6 +60,9 @@ class NotebooksTableViewController: UITableViewController {
         
         let context = CoreDataContainer.default.viewContext
         
+        // Register cellId
+        tableView.register(NotebookCell.self, forCellReuseIdentifier: "cellId")
+        
         // Create FetchedResultsController
         let notebookRequest = Notebook.fetchRequest()
         notebookRequest.fetchBatchSize = 50
@@ -123,9 +126,11 @@ extension NotebooksTableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70.0
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cellID = "noteCell"
         
         // Get the Notebook
         let notebook = self.fetchedResultsController?.object(at: IndexPath(row: indexPath.section, section: 0)) as! Notebook
@@ -144,22 +149,11 @@ extension NotebooksTableViewController {
         let note = notesArray[indexPath.row]
         
         // Create Cell
-        var cell : UITableViewCell?
-        cell = tableView.dequeueReusableCell(withIdentifier: cellID)
-        if cell == nil{
-            cell = UITableViewCell(style: .subtitle, reuseIdentifier: cellID)
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NotebookCell
+        cell.note = note
+        cell.accessibilityIdentifier = note.objectID.uriRepresentation().absoluteString
         
-        // Cell config
-        if (note.title == "") {
-            cell?.textLabel?.text = NSLocalizedString("-- No Title --", comment: "Note without title")
-        } else {
-            cell?.textLabel?.text = note.title
-        }
-        cell?.accessibilityIdentifier = note.objectID.uriRepresentation().absoluteString
-        
-        // Devolverla
-        return cell!
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -271,19 +265,28 @@ extension NotebooksTableViewController: NoteViewControllerDelegate {
 extension NotebooksTableViewController {
     // Sync row selected with detail VC displayed
     func syncRowWithDetail() {
-        // Get reference to actual detail view
-        let detailVC = self.splitViewController?.viewControllers[1] as! NoteViewController
         
-        // Get Note displayed in detail view by his model
-        let noteDisplayed = detailVC.model
-        
-        // Get the cell that matches with Note displayed and selects it
-        let cells = self.tableView.visibleCells
-        for cell in cells {
-            if (cell.accessibilityIdentifier == noteDisplayed.objectID.uriRepresentation().absoluteString) {
-                self.tableView.selectRow(at: self.tableView.indexPath(for: cell), animated: true, scrollPosition: .bottom)
+        // If splitViewController is collapsed, we dont care about row selected
+        if ((self.splitViewController?.isCollapsed)! == false) {
+            var noteDisplayed: Note?
+            
+            // Get reference to actual detail view
+            let detailNavVC = self.splitViewController?.viewControllers[1] as! UINavigationController
+            for actVC in detailNavVC.viewControllers {
+                if let detailVC = actVC as? NoteViewController {
+                    noteDisplayed = detailVC.model
+                }
+            }
+            
+            // Get the cell that matches with Note displayed and selects it
+            let cells = self.tableView.visibleCells
+            for cell in cells {
+                if (cell.accessibilityIdentifier == noteDisplayed?.objectID.uriRepresentation().absoluteString) {
+                    self.tableView.selectRow(at: self.tableView.indexPath(for: cell), animated: true, scrollPosition: .bottom)
+                }
             }
         }
+        
     }
 }
 
