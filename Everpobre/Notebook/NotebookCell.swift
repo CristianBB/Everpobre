@@ -41,7 +41,7 @@ class NotebookCell: UITableViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -77,26 +77,25 @@ class NotebookCell: UITableViewCell {
         accessibilityIdentifier = note?.objectID.uriRepresentation().absoluteString
         backgroundColor = .white
         
-        addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -4).isActive = true
+        contentView.addSubview(titleLabel)
+        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 4).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -4).isActive = true
         
-        addSubview(creationDateLabel)
+        contentView.addSubview(creationDateLabel)
         creationDateLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4).isActive = true
-        creationDateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4).isActive = true
+        creationDateLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 4).isActive = true
         creationDateLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
-        addSubview(endDateLabel)
+        contentView.addSubview(endDateLabel)
         endDateLabel.topAnchor.constraint(equalTo: creationDateLabel.topAnchor).isActive = true
         endDateLabel.leftAnchor.constraint(equalTo: creationDateLabel.rightAnchor, constant: 4).isActive = true
-        endDateLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -4).isActive = true
+        endDateLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -4).isActive = true
         
-        addSubview(tagsLabel)
+        contentView.addSubview(tagsLabel)
         tagsLabel.topAnchor.constraint(equalTo: creationDateLabel.bottomAnchor, constant: 4).isActive = true
-        tagsLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 4).isActive = true
-        tagsLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -4).isActive = true
-        
+        tagsLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 4).isActive = true
+        tagsLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -4).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -105,6 +105,7 @@ extension NoteViewController: LocationViewControllerDelegate {
         // Add image
         let imageAdded = NoteImage(image: image, positionFrame: newPosition, note: model, inContext: CoreDataContainer.default.viewContext)
         addImageToView(imageAdded)
+        view.setNeedsLayout()
     }
     
     

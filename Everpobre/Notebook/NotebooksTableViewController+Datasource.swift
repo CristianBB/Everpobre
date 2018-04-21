@@ -1,0 +1,119 @@
+//
+//  NotebooksTableViewController+Datasource.swift
+//  Everpobre
+//
+//  Created by Cristian Blazquez Bustos on 21/4/18.
+//  Copyright © 2018 Cbb. All rights reserved.
+//
+
+import UIKit
+
+// MARK:  - Table Data Source
+extension NotebooksTableViewController {
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if let fc = self.fetchedResultsController{
+            guard let sections = fc.fetchedObjects else {
+                return 1
+            }
+            return sections.count
+        }else{
+            return 0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Get the Notebook
+        let notebook = getNotebook(atSection: section)
+        
+        // Return number of Notes in Notebook
+        return notebook.notes.count
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50.0
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if let fc = fetchedResultsController{
+            let notebook = fc.object(at: IndexPath(row: section, section: 0)) as! Notebook
+            let headerView = NotebookHeader(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.sectionHeaderHeight))
+            headerView.notebook = notebook
+            return headerView
+        }else{
+            return nil
+        }
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        if let fc = fetchedResultsController{
+            return  fc.sectionIndexTitles
+        }else{
+            return nil
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60.0
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // Get Note
+        let note = getNote(atIndexPath: indexPath)
+        
+        // Create Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NotebookCell
+        cell.note = note
+        cell.accessibilityIdentifier = note.objectID.uriRepresentation().absoluteString
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Get Note
+        let note = getNote(atIndexPath: indexPath)
+        
+        // Create NoteViewController
+        let noteVC = NoteViewController(model: note)
+        noteVC.delegate = self
+        
+        let navVC = UINavigationController(rootViewController: noteVC)
+        self.splitViewController?.showDetailViewController(navVC, sender: self)
+    }
+    
+    // User delete row
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.delete) {
+            
+            // Get Note
+            let note = getNote(atIndexPath: indexPath)
+            
+            // Create UIAlertController
+            let askString1 = NSLocalizedString("Removing Note with Title", comment: "")
+            let askString2 = note.title
+            let askString3 = NSLocalizedString("This action cannot be undone, are you sure?", comment: "")
+            let actionTitle = "\(askString1) \n \(askString2) \n \(askString3)"
+            let actionSheetAlert = UIAlertController(title: actionTitle, message: nil, preferredStyle: .actionSheet)
+            
+            // Action for Yes
+            let actionYes = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .default) { (alertAction) in
+                // Delete on CoreData
+                CoreDataContainer.default.viewContext.delete(note)
+                
+                // Save changes
+                self.saveChanges()
+                
+                // Reload Table
+                tableView.reloadData()
+            }
+            
+            let actionNo = UIAlertAction(title: NSLocalizedString("No", comment: ""), style: .destructive, handler: nil)
+            
+            actionSheetAlert.addAction(actionYes)
+            actionSheetAlert.addAction(actionNo)
+            
+            present(actionSheetAlert, animated: true, completion: nil)
+        }
+    }
+    
+}

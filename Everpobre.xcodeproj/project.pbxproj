@@ -27,6 +27,15 @@
 		409A32B6208AAA570032F881 /* LocationViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32B5208AAA570032F881 /* LocationViewController+Delegates.swift */; };
 		409A32B9208AAD390032F881 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 409A32BB208AAD390032F881 /* Localizable.strings */; };
 		409A32C1208B68A90032F881 /* NotebookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32C0208B68A90032F881 /* NotebookCell.swift */; };
+		409A32C3208B8F3D0032F881 /* NotebookHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32C2208B8F3D0032F881 /* NotebookHeader.swift */; };
+		409A32C9208B95A40032F881 /* addBook.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32C4208B95A30032F881 /* addBook.png */; };
+		409A32CA208B95A40032F881 /* noDefaultNotebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32C5208B95A30032F881 /* noDefaultNotebook.png */; };
+		409A32CB208B95A40032F881 /* defaultNotebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32C6208B95A30032F881 /* defaultNotebook.png */; };
+		409A32CC208B95A40032F881 /* addNote.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32C7208B95A30032F881 /* addNote.png */; };
+		409A32CD208B95A40032F881 /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32C8208B95A40032F881 /* delete.png */; };
+		409A32CF208BA8300032F881 /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = 409A32CE208BA8300032F881 /* edit.png */; };
+		409A32D1208BA99E0032F881 /* NotebooksTableViewController+Datasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32D0208BA99E0032F881 /* NotebooksTableViewController+Datasource.swift */; };
+		409A32D3208BA9D20032F881 /* NotebooksTableViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32D2208BA9D20032F881 /* NotebooksTableViewController+Delegates.swift */; };
 		409D5BB32078E0A000690C4B /* NotebooksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB22078E0A000690C4B /* NotebooksTableViewController.swift */; };
 		409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409D5BB42078E94E00690C4B /* NoteViewController.swift */; };
 		409D5BBB207A245000690C4B /* SkyFloatingLabelTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */; };
@@ -77,6 +86,15 @@
 		409A32BA208AAD390032F881 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		409A32BD208AAD670032F881 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		409A32C0208B68A90032F881 /* NotebookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookCell.swift; sourceTree = "<group>"; };
+		409A32C2208B8F3D0032F881 /* NotebookHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookHeader.swift; sourceTree = "<group>"; };
+		409A32C4208B95A30032F881 /* addBook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addBook.png; sourceTree = "<group>"; };
+		409A32C5208B95A30032F881 /* noDefaultNotebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noDefaultNotebook.png; sourceTree = "<group>"; };
+		409A32C6208B95A30032F881 /* defaultNotebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultNotebook.png; sourceTree = "<group>"; };
+		409A32C7208B95A30032F881 /* addNote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addNote.png; sourceTree = "<group>"; };
+		409A32C8208B95A40032F881 /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
+		409A32CE208BA8300032F881 /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
+		409A32D0208BA99E0032F881 /* NotebooksTableViewController+Datasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotebooksTableViewController+Datasource.swift"; sourceTree = "<group>"; };
+		409A32D2208BA9D20032F881 /* NotebooksTableViewController+Delegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotebooksTableViewController+Delegates.swift"; sourceTree = "<group>"; };
 		409D5BB22078E0A000690C4B /* NotebooksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebooksTableViewController.swift; sourceTree = "<group>"; };
 		409D5BB42078E94E00690C4B /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyFloatingLabelTextField.framework; path = Carthage/Build/iOS/SkyFloatingLabelTextField.framework; sourceTree = "<group>"; };
@@ -205,6 +223,12 @@
 			children = (
 				409E2E7F208534EA00BDB7EB /* imagencita.png */,
 				409A32B0208A29D20032F881 /* gpsFixed.png */,
+				409A32C4208B95A30032F881 /* addBook.png */,
+				409A32C7208B95A30032F881 /* addNote.png */,
+				409A32C6208B95A30032F881 /* defaultNotebook.png */,
+				409A32C8208B95A40032F881 /* delete.png */,
+				409A32CE208BA8300032F881 /* edit.png */,
+				409A32C5208B95A30032F881 /* noDefaultNotebook.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -243,7 +267,10 @@
 			isa = PBXGroup;
 			children = (
 				409D5BB22078E0A000690C4B /* NotebooksTableViewController.swift */,
+				409A32D0208BA99E0032F881 /* NotebooksTableViewController+Datasource.swift */,
+				409A32D2208BA9D20032F881 /* NotebooksTableViewController+Delegates.swift */,
 				409A32C0208B68A90032F881 /* NotebookCell.swift */,
+				409A32C2208B8F3D0032F881 /* NotebookHeader.swift */,
 			);
 			path = Notebook;
 			sourceTree = "<group>";
@@ -341,12 +368,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				409A32CD208B95A40032F881 /* delete.png in Resources */,
+				409A32CA208B95A40032F881 /* noDefaultNotebook.png in Resources */,
 				4011D5FF2051CF2A00D3B262 /* Launch Screen.storyboard in Resources */,
+				409A32CF208BA8300032F881 /* edit.png in Resources */,
+				409A32CC208B95A40032F881 /* addNote.png in Resources */,
 				4011D5E62051CED100D3B262 /* Assets.xcassets in Resources */,
+				409A32C9208B95A40032F881 /* addBook.png in Resources */,
 				409E2E80208534EA00BDB7EB /* imagencita.png in Resources */,
 				409A32B9208AAD390032F881 /* Localizable.strings in Resources */,
 				409A32AF208A0C0D0032F881 /* LocationViewController.xib in Resources */,
 				4028E5DA2088DED900C3812D /* InstructionsViewController.xib in Resources */,
+				409A32CB208B95A40032F881 /* defaultNotebook.png in Resources */,
 				409A32B1208A29D20032F881 /* gpsFixed.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +420,7 @@
 			files = (
 				40A025BA20879500009B74DF /* _Notebook.swift in Sources */,
 				40A025BB20879500009B74DF /* _NoteImage.swift in Sources */,
+				409A32D3208BA9D20032F881 /* NotebooksTableViewController+Delegates.swift in Sources */,
 				409D5BB32078E0A000690C4B /* NotebooksTableViewController.swift in Sources */,
 				4011D5DF2051CED100D3B262 /* AppDelegate.swift in Sources */,
 				40A025B920879500009B74DF /* Notebook.swift in Sources */,
@@ -394,12 +428,14 @@
 				40A025B820879500009B74DF /* Note.swift in Sources */,
 				409A32AA208A07670032F881 /* NoteImageViewController+Gestures.swift in Sources */,
 				409A32C1208B68A90032F881 /* NotebookCell.swift in Sources */,
+				409A32D1208BA99E0032F881 /* NotebooksTableViewController+Datasource.swift in Sources */,
 				409A32AE208A0C0D0032F881 /* LocationViewController.swift in Sources */,
 				40A025BD20879500009B74DF /* _Note.swift in Sources */,
 				40577A06208777E90075E2BE /* CoreDataContainer.swift in Sources */,
 				40A025BC20879500009B74DF /* NoteImage.swift in Sources */,
 				40264E302088034400F0E256 /* Everpobre.xcdatamodeld in Sources */,
 				4028E5DD2088E21300C3812D /* UISplitViewController+Additions.swift in Sources */,
+				409A32C3208B8F3D0032F881 /* NotebookHeader.swift in Sources */,
 				409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */,
 				4028E5D92088DED900C3812D /* InstructionsViewController.swift in Sources */,
 				409A32A6208A063B0032F881 /* NoteViewController+Gestures.swift in Sources */,

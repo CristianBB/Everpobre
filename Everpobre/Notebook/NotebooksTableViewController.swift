@@ -59,6 +59,26 @@ class NotebooksTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let context = CoreDataContainer.default.viewContext
+    
+        let editButton = UIButton(type: .system)
+        editButton.setImage(#imageLiteral(resourceName: "edit.png"), for: .normal)
+        editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
+        editButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        let editBarButton = UIBarButtonItem(customView: editButton)
+        
+        let addNoteButton = UIButton(type: .system)
+        addNoteButton.setImage(#imageLiteral(resourceName: "addNote.png"), for: .normal)
+        addNoteButton.addTarget(self, action: #selector(addNoteButtonPressed), for: .touchUpInside)
+        addNoteButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        let addNoteBarButton = UIBarButtonItem(customView: addNoteButton)
+        
+        let addNotebookButton = UIButton(type: .system)
+        addNotebookButton.setImage(#imageLiteral(resourceName: "addBook.png"), for: .normal)
+        addNotebookButton.addTarget(self, action: #selector(addNotebookButtonPressed), for: .touchUpInside)
+        addNotebookButton.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        let addNotebookBarButton = UIBarButtonItem(customView: addNotebookButton)
+        
+        self.navigationItem.rightBarButtonItems = [editBarButton, addNoteBarButton, addNotebookBarButton]
         
         // Register cellId
         tableView.register(NotebookCell.self, forCellReuseIdentifier: "cellId")
@@ -76,64 +96,33 @@ class NotebooksTableViewController: UITableViewController {
                                              cacheName: nil)
         
         self.fetchedResultsController = frc
+        
     }
 
 }
 
-// MARK:  - Table Data Source
+// MARK: - Commons
 extension NotebooksTableViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        if let fc = self.fetchedResultsController{
-            guard let sections = fc.fetchedObjects else {
-                return 1
+    // Save changes in context
+    func saveChanges() {
+        if CoreDataContainer.default.viewContext.hasChanges{
+            do{
+                try CoreDataContainer.default.viewContext.save()
+            } catch let error {
+                fatalError("Error saving context: \(error)")
             }
-            return sections.count
-        }else{
-            return 0
         }
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Get the Notebook
+    
+    // Return the Notebook associated to section
+    func getNotebook(atSection section: Int) -> Notebook {
         let notebook = self.fetchedResultsController?.object(at: IndexPath(row: section, section: 0)) as! Notebook
-        
-        // Return number of Notes in Notebook
-        return notebook.notes.count
+        return notebook
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if let fc = fetchedResultsController{
-            let notebook = fc.object(at: IndexPath(row: section, section: 0)) as! Notebook
-            return notebook.name
-        }else{
-            return nil
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        if let fc = fetchedResultsController{
-            return fc.section(forSectionIndexTitle: title, at: index)
-        }else{
-            return 0
-        }
-    }
-    
-    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        if let fc = fetchedResultsController{
-            return  fc.sectionIndexTitles
-        }else{
-            return nil
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70.0
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        // Get the Notebook
-        let notebook = self.fetchedResultsController?.object(at: IndexPath(row: indexPath.section, section: 0)) as! Notebook
+    // Return Note associated to an IndexPath
+    func getNote(atIndexPath indexPath: IndexPath) -> Note {
+        let notebook = getNotebook(atSection: indexPath.section)
         
         // Convert Notes to Array an apply order cause NSSet is unordered and every cycle returns the objects in distinct order
         var notesArray = notebook.notes.allObjects as! [Note]
@@ -148,121 +137,20 @@ extension NotebooksTableViewController {
         // Get the Note
         let note = notesArray[indexPath.row]
         
-        // Create Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! NotebookCell
-        cell.note = note
-        cell.accessibilityIdentifier = note.objectID.uriRepresentation().absoluteString
-        
-        return cell
+        return note
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Get the Notebook
-        let notebook = self.fetchedResultsController?.object(at: IndexPath(row: indexPath.section, section: 0)) as! Notebook
-        
-        // Convert Notes to Array an apply order cause NSSet is unordered and every cycle returns the objects in distinct order
-        var notesArray = notebook.notes.allObjects as! [Note]
-        notesArray.sort {
-            if $0.title != $1.title {
-                return $0.title < $1.title
-            } else {
-                return $0.creationDate < $1.creationDate
-            }
-        }
-        
-        // Get the Note selected
-        let note = notesArray[indexPath.row]
-        
-        // Create NoteViewController
-        let noteVC = NoteViewController(model: note)
-        noteVC.delegate = self
-        
-        let navVC = UINavigationController(rootViewController: noteVC)
-        self.splitViewController?.showDetailViewController(navVC, sender: self)
-    }
-
-}
-
-// MARK:  - Fetches
-extension NotebooksTableViewController {
     
     func executeSearch(){
         if let fc = fetchedResultsController{
             do{
                 try fc.performFetch()
-            
+                
             }catch let e as NSError{
                 print("Error while trying to perform a search: \n\(e)\n\(String(describing: fetchedResultsController))")
             }
         }
     }
-}
-
-
-// MARK:  - NSFetchedResultsControllerDelegate
-extension NotebooksTableViewController: NSFetchedResultsControllerDelegate{
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange sectionInfo: NSFetchedResultsSectionInfo,
-                    atSectionIndex sectionIndex: Int,
-                    for type: NSFetchedResultsChangeType) {
-        
-        let set = IndexSet(integer: sectionIndex)
-        
-        switch (type){
-            
-        case .insert:
-            tableView.insertSections(set, with: .fade)
-            
-        case .delete:
-            tableView.deleteSections(set, with: .fade)
-            
-        default:
-            // irrelevant in our case
-            break
-            
-        }
-    }
-    
-    
-    // This method only receives changes on Sections
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.syncRowWithDetail()
-        }
-    }
-}
-
-extension NotebooksTableViewController: NoteViewControllerDelegate {
-    func didChange(note: Note, type: typeOfNoteChange) {
-        
-        // Save context
-        if CoreDataContainer.default.viewContext.hasChanges{
-            do{
-                try CoreDataContainer.default.viewContext.save()
-            } catch let error {
-                fatalError("Error saving context: \(error)")
-            }
-        }
-        
-        // Validate if changes affects to row sortening
-        if (type == .title || type == .expirationDate || type == .tags) {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.syncRowWithDetail()
-            }
-        }
-    }
-}
-
-// MARK: - Commons
-extension NotebooksTableViewController {
     // Sync row selected with detail VC displayed
     func syncRowWithDetail() {
         
@@ -286,6 +174,21 @@ extension NotebooksTableViewController {
                 }
             }
         }
+    }
+    
+    @objc func editButtonPressed() {
+        if (tableView.isEditing) {
+            tableView.setEditing(false, animated: true)
+        } else {
+            tableView.setEditing(true, animated: true)
+        }
+    }
+    
+    @objc func addNoteButtonPressed() {
+        
+    }
+    
+    @objc func addNotebookButtonPressed() {
         
     }
 }

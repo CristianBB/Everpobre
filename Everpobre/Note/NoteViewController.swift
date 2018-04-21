@@ -240,6 +240,8 @@ class NoteViewController: UIViewController {
         let noteImageView = NoteImageViewController(model: image)
         noteImageView.delegate = self as NoteImageViewControllerDelegate
         noteTextView.addSubview(noteImageView)
+        
+        
     }
     
 }
