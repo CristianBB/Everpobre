@@ -74,11 +74,7 @@ extension NotebooksTableViewController {
         let note = getNote(atIndexPath: indexPath)
         
         // Create NoteViewController
-        let noteVC = NoteViewController(model: note)
-        noteVC.delegate = self
-        
-        let navVC = UINavigationController(rootViewController: noteVC)
-        self.splitViewController?.showDetailViewController(navVC, sender: self)
+        self.showNote(note: note)
     }
     
     // User delete row
@@ -97,6 +93,14 @@ extension NotebooksTableViewController {
             
             // Action for Yes
             let actionYes = UIAlertAction(title: NSLocalizedString("Yes", comment: ""), style: .default) { (alertAction) in
+                // Check if note Displayed is the same that the Note deleted to change DetailVC
+                if let noteDisplayed = self.getNoteDisplayed() {
+                    if (noteDisplayed.objectID == note.objectID) {
+                        let instructionsVC = InstructionsViewController()
+                        self.splitViewController?.showDetailViewController(instructionsVC, sender: self)
+                    }
+                }
+                
                 // Delete on CoreData
                 CoreDataContainer.default.viewContext.delete(note)
                 

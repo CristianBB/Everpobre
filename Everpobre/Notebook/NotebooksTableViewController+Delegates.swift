@@ -12,29 +12,6 @@ import CoreData
 // MARK:  - NSFetchedResultsControllerDelegate
 extension NotebooksTableViewController: NSFetchedResultsControllerDelegate{
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange sectionInfo: NSFetchedResultsSectionInfo,
-                    atSectionIndex sectionIndex: Int,
-                    for type: NSFetchedResultsChangeType) {
-        
-        let set = IndexSet(integer: sectionIndex)
-        
-        switch (type){
-            
-        case .insert:
-            tableView.insertSections(set, with: .fade)
-            
-        case .delete:
-            tableView.deleteSections(set, with: .fade)
-            
-        default:
-            // irrelevant in our case
-            break
-            
-        }
-    }
-    
-    
     // This method only receives changes on Sections
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                     didChange anObject: Any,

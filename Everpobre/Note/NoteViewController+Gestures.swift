@@ -15,10 +15,10 @@ extension NoteViewController {
     @objc func closeKeyboard() {
         if (titleTextField.isFirstResponder) {
             titleTextField.resignFirstResponder()
-        } else if (endDateTextField.isFirstResponder) {
-            endDateTextField.resignFirstResponder()
-        } else if (tagsTexTield.isEditing) {
-            tagsTexTield.endEditing()
+        } else if (endDateSky.isFirstResponder) {
+            endDateSky.resignFirstResponder()
+        } else if (tagsWST.isEditing) {
+            tagsWST.endEditing()
         } else if (noteTextView.isFirstResponder) {
             noteTextView.resignFirstResponder()
         }

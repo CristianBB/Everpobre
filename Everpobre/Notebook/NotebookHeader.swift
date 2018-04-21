@@ -16,7 +16,7 @@ class NotebookHeader: UIView {
             if (notebook?.name == "") {
                 nameLabel.text = NSLocalizedString("-- No Name --", comment: "").uppercased()
             } else {
-                nameLabel.text = notebook?.name.uppercased()
+                nameLabel.text = notebook?.name
             }
             
             let dateFormatter = DateFormatter()

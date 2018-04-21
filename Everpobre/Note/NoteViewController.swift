@@ -39,9 +39,9 @@ class NoteViewController: UIViewController {
 
     // MARK: - UI Components
     let titleTextField = SkyFloatingLabelTextField()
-    let notebookLabel = SkyFloatingLabelTextField()
-    let endDateTextField = SkyFloatingLabelTextField()
-    let tagsTexTield = WSTagsField()
+    let notebookSky = SkyFloatingLabelTextField()
+    let endDateSky = SkyFloatingLabelTextField()
+    let tagsWST = WSTagsField()
     let noteTextView = UITextView()
     
     var relativePoint: CGPoint!
@@ -84,18 +84,18 @@ class NoteViewController: UIViewController {
         twoTapGesture.numberOfTapsRequired = 2
         noteTextView.addGestureRecognizer(twoTapGesture)
         
-        tagsTexTield.onDidAddTag = { (_,_) in
+        tagsWST.onDidAddTag = { (_,_) in
             var tagsString = ""
-            for tag in self.tagsTexTield.tags {
+            for tag in self.tagsWST.tags {
                 tagsString += "\(tag.text),"
             }
             self.model.tags = tagsString
             self.delegate?.didChange(note: self.model, type: .tags)
         }
         
-        tagsTexTield.onDidRemoveTag = { (_,_) in
+        tagsWST.onDidRemoveTag = { (_,_) in
             var tagsString = ""
-            for tag in self.tagsTexTield.tags {
+            for tag in self.tagsWST.tags {
                 tagsString += "\(tag.text),"
             }
             self.model.tags = tagsString
@@ -124,9 +124,9 @@ class NoteViewController: UIViewController {
         guard let myView = view else { return }
         
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        notebookLabel.translatesAutoresizingMaskIntoConstraints = false
-        endDateTextField.translatesAutoresizingMaskIntoConstraints = false
-        tagsTexTield.translatesAutoresizingMaskIntoConstraints = false
+        notebookSky.translatesAutoresizingMaskIntoConstraints = false
+        endDateSky.translatesAutoresizingMaskIntoConstraints = false
+        tagsWST.translatesAutoresizingMaskIntoConstraints = false
         noteTextView.translatesAutoresizingMaskIntoConstraints = false
         
         // Main View
@@ -139,57 +139,61 @@ class NoteViewController: UIViewController {
         titleTextField.title = NSLocalizedString("Title", comment: "")
         titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingChanged)
         titleTextField.backgroundColor = .cyan
-
+        
         titleTextField.leftAnchor.constraint(equalTo: guide.leftAnchor, constant: 8).isActive = true
         titleTextField.rightAnchor.constraint(equalTo: guide.rightAnchor, constant: -8).isActive = true
         titleTextField.topAnchor.constraint(equalTo: guide.topAnchor, constant: 8).isActive = true
         titleTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         // Configure notebookLabel
-        myView.addSubview(notebookLabel)
-        notebookLabel.placeholder = "Notebook"
-        notebookLabel.title = "Notebook"
-        notebookLabel.titleFont = UIFont(name: notebookLabel.titleFont.fontName, size: 10)!
-        notebookLabel.font = UIFont(name: (notebookLabel.font?.fontName)!, size: 10)
-        notebookLabel.isUserInteractionEnabled = false
-        notebookLabel.backgroundColor = .blue
+        myView.addSubview(notebookSky)
+        notebookSky.placeholder = "Notebook"
+        notebookSky.title = "Notebook"
+        notebookSky.titleFont = UIFont(name: notebookSky.titleFont.fontName, size: 10)!
+        notebookSky.font = UIFont(name: (notebookSky.font?.fontName)!, size: 10)
+        notebookSky.isUserInteractionEnabled = false
+        notebookSky.backgroundColor = .blue
         
-        notebookLabel.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
-        notebookLabel.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 4).isActive = true
-        notebookLabel.widthAnchor.constraint(equalToConstant: 110).isActive = true
-        notebookLabel.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        notebookSky.inputView = pickerView
+        
+        notebookSky.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
+        notebookSky.topAnchor.constraint(equalTo: titleTextField.bottomAnchor, constant: 4).isActive = true
+        notebookSky.widthAnchor.constraint(equalToConstant: 110).isActive = true
+        notebookSky.heightAnchor.constraint(equalToConstant: 25).isActive = true
         
         // Configure endDate
-        myView.addSubview(endDateTextField)
-        endDateTextField.placeholder = NSLocalizedString("Expiration Date", comment: "")
-        endDateTextField.title = NSLocalizedString("Expiration Date", comment: "")
-        endDateTextField.titleFont = UIFont(name: endDateTextField.titleFont.fontName, size: 10)!
-        endDateTextField.font = UIFont(name: (endDateTextField.font?.fontName)!, size: 10)
-        endDateTextField.addTarget(self, action: #selector(editingEndDateTextField), for: UIControlEvents.touchDown)
-        endDateTextField.backgroundColor = .red
+        myView.addSubview(endDateSky)
+        endDateSky.placeholder = NSLocalizedString("Expiration Date", comment: "")
+        endDateSky.title = NSLocalizedString("Expiration Date", comment: "")
+        endDateSky.titleFont = UIFont(name: endDateSky.titleFont.fontName, size: 10)!
+        endDateSky.font = UIFont(name: (endDateSky.font?.fontName)!, size: 10)
+        endDateSky.addTarget(self, action: #selector(editingEndDateTextField), for: UIControlEvents.touchDown)
+        endDateSky.backgroundColor = .red
         
-        endDateTextField.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
-        endDateTextField.topAnchor.constraint(equalTo: notebookLabel.bottomAnchor, constant: 4).isActive = true
-        endDateTextField.widthAnchor.constraint(equalTo: notebookLabel.widthAnchor).isActive = true
-        endDateTextField.heightAnchor.constraint(equalTo: notebookLabel.heightAnchor).isActive = true
+        endDateSky.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
+        endDateSky.topAnchor.constraint(equalTo: notebookSky.bottomAnchor, constant: 4).isActive = true
+        endDateSky.widthAnchor.constraint(equalTo: notebookSky.widthAnchor).isActive = true
+        endDateSky.heightAnchor.constraint(equalTo: notebookSky.heightAnchor).isActive = true
     
         // Configure tagsTexTield
-        myView.addSubview(tagsTexTield)
-        tagsTexTield.font = .systemFont(ofSize: 10.0)
-        tagsTexTield.placeholder = NSLocalizedString("Tags", comment: "")
-        tagsTexTield.spaceBetweenTags = 3.0
-        tagsTexTield.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        tagsTexTield.tintColor = .green
-        tagsTexTield.textColor = .black
-        tagsTexTield.fieldTextColor = .blue
-        tagsTexTield.selectedColor = .black
-        tagsTexTield.selectedTextColor = .red
-        tagsTexTield.backgroundColor = .lightGray
+        myView.addSubview(tagsWST)
+        tagsWST.font = .systemFont(ofSize: 10.0)
+        tagsWST.placeholder = NSLocalizedString("Tags", comment: "")
+        tagsWST.spaceBetweenTags = 3.0
+        tagsWST.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        tagsWST.tintColor = .green
+        tagsWST.textColor = .black
+        tagsWST.fieldTextColor = .blue
+        tagsWST.selectedColor = .black
+        tagsWST.selectedTextColor = .red
+        tagsWST.backgroundColor = .lightGray
         
-        tagsTexTield.leftAnchor.constraint(equalTo: notebookLabel.rightAnchor, constant: 8).isActive = true
-        tagsTexTield.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
-        tagsTexTield.topAnchor.constraint(equalTo: notebookLabel.topAnchor).isActive = true
-        tagsTexTield.bottomAnchor.constraint(equalTo: endDateTextField.bottomAnchor).isActive = true
+        tagsWST.leftAnchor.constraint(equalTo: notebookSky.rightAnchor, constant: 8).isActive = true
+        tagsWST.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
+        tagsWST.topAnchor.constraint(equalTo: notebookSky.topAnchor).isActive = true
+        tagsWST.bottomAnchor.constraint(equalTo: endDateSky.bottomAnchor).isActive = true
         
         // Configure noteTextView
         myView.addSubview(noteTextView)
@@ -197,7 +201,7 @@ class NoteViewController: UIViewController {
         noteTextView.backgroundColor = .yellow
         noteTextView.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
-        noteTextView.topAnchor.constraint(equalTo: tagsTexTield.bottomAnchor, constant: 4).isActive = true
+        noteTextView.topAnchor.constraint(equalTo: tagsWST.bottomAnchor, constant: 4).isActive = true
         noteTextView.bottomAnchor.constraint(equalTo: myView.bottomAnchor, constant: -8).isActive = true
         
         self.view = myView
@@ -217,12 +221,12 @@ class NoteViewController: UIViewController {
         dateFormatter.dateFormat = "dd/MM/yyyy hh:mm a"
         
         titleTextField.text = model.title
-        notebookLabel.text = model.notebook.name
-        endDateTextField.text = dateFormatter.string(from: model.endDate)
+        notebookSky.text = model.notebook.name
+        endDateSky.text = dateFormatter.string(from: model.endDate)
         let arrTags = model.tags.components(separatedBy: ",")
         for tag in arrTags {
             if (tag != "") {
-                tagsTexTield.addTag(tag)
+                tagsWST.addTag(tag)
             }
         }
         

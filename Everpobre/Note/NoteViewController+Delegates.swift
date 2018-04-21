@@ -38,6 +38,11 @@ extension NoteViewController: UIImagePickerControllerDelegate, UINavigationContr
     }
 }
 
+// MARK: -
+extension NoteViewController: UIPickerViewDelegate {
+    
+}
+
 // MARK: - NoteTextViewDelegate
 extension NoteViewController: UITextViewDelegate {
     

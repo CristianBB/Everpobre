@@ -151,29 +151,46 @@ extension NotebooksTableViewController {
         }
     }
     
-    // Sync row selected with detail VC displayed
-    func syncRowWithDetail() {
+    // Get Note displayed on detail if there is a Note displayed, if not return nil
+    func getNoteDisplayed() -> Note? {
+        var noteDisplayed: Note?
         
-        // If splitViewController is collapsed, we dont care about row selected
-        if ((self.splitViewController?.isCollapsed)! == false) {
-            var noteDisplayed: Note?
-            
+        // If splitViewController is collapsed, we dont care about note displayed
+        if (self.splitViewController?.isCollapsed)! {
+            return nil
+        } else {
             // Get reference to actual detail view
-            let detailNavVC = self.splitViewController?.viewControllers[1] as! UINavigationController
+            guard let detailNavVC = self.splitViewController?.viewControllers[1] as? UINavigationController else { return nil }
             for actVC in detailNavVC.viewControllers {
                 if let detailVC = actVC as? NoteViewController {
                     noteDisplayed = detailVC.model
                 }
             }
-            
-            // Get the cell that matches with Note displayed and selects it
-            let cells = self.tableView.visibleCells
-            for cell in cells {
-                if (cell.accessibilityIdentifier == noteDisplayed?.objectID.uriRepresentation().absoluteString) {
-                    self.tableView.selectRow(at: self.tableView.indexPath(for: cell), animated: true, scrollPosition: .bottom)
-                }
+        }
+        
+        return noteDisplayed
+    }
+    
+    // Sync row selected with detail VC displayed
+    func syncRowWithDetail() {
+        
+        guard let noteDisplayed = getNoteDisplayed() else { return }
+        
+        // Get the cell that matches with Note displayed and selects it
+        let cells = self.tableView.visibleCells
+        for cell in cells {
+            if (cell.accessibilityIdentifier == noteDisplayed.objectID.uriRepresentation().absoluteString) {
+                self.tableView.selectRow(at: self.tableView.indexPath(for: cell), animated: true, scrollPosition: .bottom)
             }
         }
+    }
+    
+    // Show Note in Detail
+    func showNote(note: Note) {
+        let noteVC = NoteViewController(model: note)
+        noteVC.delegate = self
+        let noteNavVC = UINavigationController(rootViewController: noteVC)
+        self.splitViewController?.showDetailViewController(noteNavVC, sender: self)
     }
     
     @objc func editButtonPressed() {
@@ -186,10 +203,46 @@ extension NotebooksTableViewController {
     
     @objc func addNoteButtonPressed() {
         
+        // Get Default Notebook
+        let req = Notebook.fetchRequest()
+        req.fetchLimit = 1
+        req.predicate = NSPredicate(format: "defaultNotebook == %@", NSNumber(booleanLiteral: true))
+        guard let results = try? CoreDataContainer.default.viewContext.fetch(req) as! [Notebook] else {return}
+        let defaultNotebook = results[0]
+        
+        // Add Note
+        let newNote = Note(notebook: defaultNotebook, inContext: CoreDataContainer.default.viewContext)
+        
+        // Show note added on detail
+        self.showNote(note: newNote)
+        
+        // Save
+        self.saveChanges()
+        
     }
     
     @objc func addNotebookButtonPressed() {
         
+        
+        let alertController = UIAlertController(title: NSLocalizedString("New Notebook", comment: ""), message: "", preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = NSLocalizedString("Notebook Name", comment: "")
+        }
+        
+        let saveAction = UIAlertAction(title: NSLocalizedString("Save", comment: ""), style: .default, handler: { alert -> Void in
+            let textField = alertController.textFields![0] as UITextField
+            let notebookName = textField.text
+            let _ = Notebook(isDefaultNotebook: false, name: notebookName!, inContext: CoreDataContainer.default.viewContext)
+            
+            self.saveChanges()
+        })
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .destructive)
+        
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
 }
 

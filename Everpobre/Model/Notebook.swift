@@ -9,7 +9,7 @@ open class Notebook: _Notebook {
         
         self.isDefaultNotebook = isDefaultNotebook
         self.creationDate = Date()
-        self.name = name
+        self.name = name.uppercased()
     }
     
     convenience init(isDefaultNotebook:Bool, inContext: NSManagedObjectContext) {
