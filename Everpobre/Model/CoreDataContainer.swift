@@ -52,8 +52,48 @@ KCPersistentContainer : NSPersistentContainer{
     }
 }
 
+// Returns TRUE if there is data in PersistentStore, else returns FALSE
+func storeLoaded() -> Bool {
+    let context = CoreDataContainer.default.viewContext
+    
+    // Search Notebooks (Always must be at least defaul Notebook)
+    let req = Notebook.fetchRequest()
+    req.fetchLimit = 1
 
-func loadFakeCoreData() {
+    guard let results = try? context.fetch(req) as! [Note]  else { return false }
+    
+    if (results.count == 0) {
+        return false
+    }
+    
+    return true
+}
+
+// Load Default Data un Persistent Store
+func loadData() {
+    let context = CoreDataContainer.default.viewContext
+    
+    // Notebook por defecto
+    let defaultNotebook = Notebook(isDefaultNotebook: true, name: NSLocalizedString("My Notebook", comment: ""), inContext: context)
+    
+    // First Note
+    let noteText = "Bienvenido a EverPobre\n\n\nEstas son algunas de las características de la aplicación\n\n\n- Agrega Notas rápidas mediante el icono de la barra de navegación. Las notas agregadas desde aquí serán incluidas directamente en la libreta definida por defecto\n\n- Agrega tantas libretas como quieras\n\n- Si quieres agregar una nota directamente a una libreta, utiliza el botón de agregar nota asociado a la Libreta a la que desees añadir la nota\n\n- Agrega tantas imágenes como quieras dentro de las notas, para agregar una imagen únicamente debes realizar una pulsación larga sobre un área vacía dentro del área de texto de la nota. Al realizar la acción podrás seleccionar como quieres añadir la imagen: Desde la galería, Desde la Camara de fotos o introduciendo una localización para agregar un mapa a la nota.\n\n- Para entrar en el modo Edición de imagen, pulsa dos veces sobre la imagen hasta que veas que aparece un borde de color rojo a su alrededor. En el modo edición podrás rotar la imagen (mediante deslizamientos a izquierda o derecha), escalarla (realizando un pinzamiento con los dedos), o eliminarla (realizando un desplazamiento hacia abajo)\n\n- Mueve las imágenes libremente por el interior de la nota. Para mover una imagen simplemente tienes que realizar una pulsación larga sobre la imagen que deseas mover hasta que aparezca un borde de color verde a su alrededor.\n\n- Para eliminar una Nota, pulsa el icono de Edición de la barra de navegación para entrar en el modo de Edición. Aparecerá un botón que te permitirá seleccionar la nota que desees eliminar\n\n- Para editar, eliminar o poner por defecto una libreta procede del mismo modo que para editar una Nota. Cada libreta tiene un botón de edición asociado que, una vez pulsado, te permitirá acceder a las distintas opciones de edición de la libreta.\n\n\nDisfruta la aplicación!\n"
+    let defaultNote = Note(notebook: defaultNotebook, inContext: context)
+    defaultNote.title = "Bienvenido a Everpobre"
+    defaultNote.text = noteText
+    
+    if context.hasChanges{
+        do{
+            try context.save()
+        } catch let error {
+            fatalError("Error saving context: \(error)")
+        }
+    }
+
+}
+
+// Load Dummy data for test purposes
+func loadDummyData() {
     
     CoreDataContainer.default.zapAllData()
     

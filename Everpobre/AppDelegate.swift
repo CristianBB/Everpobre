@@ -17,7 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         // Override point for customization after application launch.
         window = UIWindow()
         
-        //loadFakeCoreData()
+        if (storeLoaded() == false) {
+            loadData()
+        }
         
         let masterVC = UINavigationController(rootViewController: NotebooksTableViewController())
         let detailVC = BlankViewController()
