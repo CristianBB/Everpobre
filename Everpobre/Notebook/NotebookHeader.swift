@@ -23,7 +23,28 @@ class NotebookHeader: UIView {
     let isEditing: Bool
     weak var delegate: NotebookHeaderDelegate?
     
-    var nameLabel: UILabel = {
+    private var leftAnchorDefaultView: NSLayoutConstraint?
+    private var rightAnchorDefaultView: NSLayoutConstraint?
+    
+    let defaultView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let leftEditView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let rightEditView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .black
@@ -71,33 +92,42 @@ class NotebookHeader: UIView {
         } else {
             nameLabel.text = model.name
         }
-        addSubview(nameLabel)
-        nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 4).isActive = true
-        nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
-        nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
         
         // creationDateLabel
         let creationPrefix = NSLocalizedString("Created:", comment: "")
         let creationString = dateFormatter.string(from: model.creationDate)
         creationDateLabel.text = "\(creationPrefix) \(creationString)"
         
-        addSubview(creationDateLabel)
+        // Default View, where default UI components will be located
+        addSubview(defaultView)
+        defaultView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        leftAnchorDefaultView = defaultView.leftAnchor.constraint(equalTo: leftAnchor)
+        rightAnchorDefaultView = defaultView.rightAnchor.constraint(equalTo: rightAnchor)
+        defaultView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        leftAnchorDefaultView?.isActive = true
+        rightAnchorDefaultView?.isActive = true
+        
+        defaultView.addSubview(nameLabel)
+        nameLabel.topAnchor.constraint(equalTo: defaultView.topAnchor, constant: 4).isActive = true
+        nameLabel.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 8).isActive = true
+        nameLabel.rightAnchor.constraint(equalTo: defaultView.rightAnchor, constant: -40).isActive = true
+        
+        defaultView.addSubview(creationDateLabel)
         creationDateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4).isActive = true
-        creationDateLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 8).isActive = true
+        creationDateLabel.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 8).isActive = true
         creationDateLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         if (isEditing) {
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(editName))
-            tapGesture.numberOfTapsRequired = 1
-            nameLabel.isUserInteractionEnabled = true
-            nameLabel.addGestureRecognizer(tapGesture)
+            addLeftEditView()
+            
         } else {
             nameLabel.isUserInteractionEnabled = false
+            leftAnchorDefaultView?.isActive = true
             if (model.isDefaultNotebook) {
                 // defaultImage
-                addSubview(defaultImage)
-                defaultImage.topAnchor.constraint(equalTo: topAnchor, constant: 4).isActive = true
-                defaultImage.rightAnchor.constraint(equalTo: rightAnchor, constant: -4).isActive = true
+                defaultView.addSubview(defaultImage)
+                defaultImage.topAnchor.constraint(equalTo: defaultView.topAnchor, constant: 4).isActive = true
+                defaultImage.rightAnchor.constraint(equalTo: defaultView.rightAnchor, constant: -4).isActive = true
                 defaultImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
                 defaultImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
             }
@@ -108,7 +138,103 @@ class NotebookHeader: UIView {
 
 extension NotebookHeader {
     
+    func addLeftEditView() {
+        addSubview(leftEditView)
+        leftEditView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        leftEditView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        leftEditView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        leftEditView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        // Change default View left position
+        leftAnchorDefaultView?.isActive = false
+        rightAnchorDefaultView?.isActive = false
+        leftAnchorDefaultView = defaultView.leftAnchor.constraint(equalTo: leftEditView.rightAnchor)
+        rightAnchorDefaultView = defaultView.rightAnchor.constraint(equalTo: rightAnchor)
+        leftAnchorDefaultView?.isActive = true
+        rightAnchorDefaultView?.isActive = true
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+        
+        // Edit Button
+        let editButton = UIButton(type: .custom)
+        editButton.frame.size = CGSize(width: 30, height: 30)
+        editButton.setImage(#imageLiteral(resourceName: "edit.png"), for: .normal)
+        editButton.layer.masksToBounds = false
+        editButton.layer.cornerRadius = editButton.frame.width / 2
+        editButton.addTarget(self, action: #selector(addRightEditView), for: .touchDown)
+        
+        leftEditView.addSubview(editButton)
+        leftEditView.translatesAutoresizingMaskIntoConstraints = false
+        editButton.leftAnchor.constraint(equalTo: leftEditView.leftAnchor).isActive = true
+        editButton.topAnchor.constraint(equalTo: leftEditView.topAnchor).isActive = true
+    }
+    
+    @objc func addRightEditView() {
+        rightEditView.backgroundColor = .red
+        addSubview(rightEditView)
+        rightEditView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        rightEditView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        rightEditView.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        rightEditView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        // Change defaultView position
+        leftAnchorDefaultView?.isActive = false
+        rightAnchorDefaultView?.isActive = false
+        leftAnchorDefaultView = defaultView.leftAnchor.constraint(equalTo: leftAnchor)
+        rightAnchorDefaultView = defaultView.rightAnchor.constraint(equalTo: rightEditView.leftAnchor)
+        leftAnchorDefaultView?.isActive = true
+        rightAnchorDefaultView?.isActive = true
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+        
+        // Remove leftEditView
+        leftEditView.removeFromSuperview()
+        
+        // Add gesture on defaultView to Deactivate Edition
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(cancelEdit))
+        tapGesture.numberOfTapsRequired = 1
+        defaultView.isUserInteractionEnabled = true
+        defaultView.addGestureRecognizer(tapGesture)
+
+        
+    }
+    
+    @objc func cancelEdit() {
+        // Remove gesture on defaultView
+        defaultView.gestureRecognizers?.forEach(defaultView.removeGestureRecognizer)
+
+        // Change defaultView position
+        leftAnchorDefaultView?.isActive = false
+        rightAnchorDefaultView?.isActive = false
+        leftAnchorDefaultView = defaultView.leftAnchor.constraint(equalTo: leftAnchor)
+        rightAnchorDefaultView = defaultView.rightAnchor.constraint(equalTo: rightAnchor)
+        leftAnchorDefaultView?.isActive = true
+        rightAnchorDefaultView?.isActive = true
+        UIView.animate(withDuration: 0.5) {
+            self.layoutIfNeeded()
+        }
+        
+        // Remove rightEditView
+        rightEditView.removeFromSuperview()
+        
+        addLeftEditView()
+    }
+    
     @objc func editName() {
         self.delegate?.editNotebookName(notebook: model)
+    }
+    
+    func addNoteToNotebook() {
+        self.delegate?.addNoteToNotebook(notebook: model)
+    }
+    
+    func deleteNotebook() {
+        self.delegate?.deleteNotebook(notebook: model)
+    }
+    
+    func setDefaultNotebook() {
+        self.delegate?.setDefaultNotebook(notebook: model)
     }
 }

@@ -47,6 +47,18 @@ extension NotebooksTableViewController: NoteViewControllerDelegate {
 
 // MARK: - NotebookHeaderDelegate
 extension NotebooksTableViewController: NotebookHeaderDelegate {
+    func addNoteToNotebook(notebook: Notebook) {
+        
+    }
+    
+    func deleteNotebook(notebook: Notebook) {
+        
+    }
+    
+    func setDefaultNotebook(notebook: Notebook) {
+        
+    }
+    
     func editNotebookName(notebook: Notebook) {
         let alertController = UIAlertController(title: NSLocalizedString("Edit Notebook Name", comment: ""), message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
