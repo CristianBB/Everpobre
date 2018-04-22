@@ -41,7 +41,6 @@
 		409D5BBB207A245000690C4B /* SkyFloatingLabelTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */; };
 		409D5BBD207A245500690C4B /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409D5BBC207A245500690C4B /* WSTagsField.framework */; };
 		409E2E7D208516E100BDB7EB /* NoteImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409E2E7C208516E100BDB7EB /* NoteImageViewController.swift */; };
-		409E2E80208534EA00BDB7EB /* imagencita.png in Resources */ = {isa = PBXBuildFile; fileRef = 409E2E7F208534EA00BDB7EB /* imagencita.png */; };
 		40A025B820879500009B74DF /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B220879500009B74DF /* Note.swift */; };
 		40A025B920879500009B74DF /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B320879500009B74DF /* Notebook.swift */; };
 		40A025BA20879500009B74DF /* _Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A025B420879500009B74DF /* _Notebook.swift */; };
@@ -101,7 +100,6 @@
 		409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SkyFloatingLabelTextField.framework; path = Carthage/Build/iOS/SkyFloatingLabelTextField.framework; sourceTree = "<group>"; };
 		409D5BBC207A245500690C4B /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = Carthage/Build/iOS/WSTagsField.framework; sourceTree = "<group>"; };
 		409E2E7C208516E100BDB7EB /* NoteImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteImageViewController.swift; sourceTree = "<group>"; };
-		409E2E7F208534EA00BDB7EB /* imagencita.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imagencita.png; sourceTree = "<group>"; };
 		40A025B220879500009B74DF /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		40A025B320879500009B74DF /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		40A025B420879500009B74DF /* _Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _Notebook.swift; sourceTree = "<group>"; };
@@ -223,7 +221,6 @@
 		409A32B2208A29E20032F881 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				409E2E7F208534EA00BDB7EB /* imagencita.png */,
 				409A32B0208A29D20032F881 /* gpsFixed.png */,
 				409A32C4208B95A30032F881 /* addBook.png */,
 				409A32C7208B95A30032F881 /* addNote.png */,
@@ -378,7 +375,6 @@
 				409A32CC208B95A40032F881 /* addNote.png in Resources */,
 				4011D5E62051CED100D3B262 /* Assets.xcassets in Resources */,
 				409A32C9208B95A40032F881 /* addBook.png in Resources */,
-				409E2E80208534EA00BDB7EB /* imagencita.png in Resources */,
 				409A32B9208AAD390032F881 /* Localizable.strings in Resources */,
 				409A32AF208A0C0D0032F881 /* LocationViewController.xib in Resources */,
 				4028E5DA2088DED900C3812D /* InstructionsViewController.xib in Resources */,

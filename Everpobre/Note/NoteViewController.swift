@@ -141,8 +141,8 @@ class NoteViewController: UIViewController {
         myView.addSubview(titleTextField)
         titleTextField.placeholder = NSLocalizedString("Note Title", comment: "")
         titleTextField.title = NSLocalizedString("Title", comment: "")
+        titleTextField.titleColor = UIColor(red:0.03, green:0.64, blue:0.65, alpha:1.0)
         titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingDidEnd)
-        titleTextField.backgroundColor = .cyan
         
         titleTextField.leftAnchor.constraint(equalTo: guide.leftAnchor, constant: 8).isActive = true
         titleTextField.rightAnchor.constraint(equalTo: guide.rightAnchor, constant: -8).isActive = true
@@ -153,10 +153,10 @@ class NoteViewController: UIViewController {
         myView.addSubview(notebookSky)
         notebookSky.placeholder = "Notebook"
         notebookSky.title = "Notebook"
+        notebookSky.titleColor = UIColor(red:0.03, green:0.64, blue:0.65, alpha:1.0)
         notebookSky.titleFont = UIFont(name: notebookSky.titleFont.fontName, size: 10)!
         notebookSky.font = UIFont(name: (notebookSky.font?.fontName)!, size: 10)
         notebookSky.addTarget(self, action: #selector(loadPickOptions), for: .touchDown)
-        notebookSky.backgroundColor = .blue
         
         notebookPickerView.delegate = self
         notebookSky.inputView = notebookPickerView
@@ -170,10 +170,10 @@ class NoteViewController: UIViewController {
         myView.addSubview(endDateSky)
         endDateSky.placeholder = NSLocalizedString("Expiration Date", comment: "")
         endDateSky.title = NSLocalizedString("Expiration Date", comment: "")
+        endDateSky.titleColor = UIColor(red:0.03, green:0.64, blue:0.65, alpha:1.0)
         endDateSky.titleFont = UIFont(name: endDateSky.titleFont.fontName, size: 10)!
         endDateSky.font = UIFont(name: (endDateSky.font?.fontName)!, size: 10)
         endDateSky.addTarget(self, action: #selector(editingEndDateTextField), for: .touchDown)
-        endDateSky.backgroundColor = .red
         
         endDateSky.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         endDateSky.topAnchor.constraint(equalTo: notebookSky.bottomAnchor, constant: 4).isActive = true
@@ -185,13 +185,14 @@ class NoteViewController: UIViewController {
         tagsWST.font = .systemFont(ofSize: 10.0)
         tagsWST.placeholder = NSLocalizedString("Tags", comment: "")
         tagsWST.spaceBetweenTags = 3.0
+        tagsWST.backgroundColor = UIColor(red:0.57, green:1.00, blue:1.00, alpha:1.0)
+        tagsWST.layer.cornerRadius = 5
         tagsWST.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tagsWST.tintColor = .green
         tagsWST.textColor = .black
         tagsWST.fieldTextColor = .blue
         tagsWST.selectedColor = .black
         tagsWST.selectedTextColor = .red
-        tagsWST.backgroundColor = .lightGray
         
         tagsWST.leftAnchor.constraint(equalTo: notebookSky.rightAnchor, constant: 8).isActive = true
         tagsWST.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
@@ -201,7 +202,8 @@ class NoteViewController: UIViewController {
         // Configure noteTextView
         myView.addSubview(noteTextView)
         noteTextView.delegate = self
-        noteTextView.backgroundColor = .yellow
+        noteTextView.backgroundColor = UIColor(red:0.91, green:1.00, blue:1.00, alpha:1.0)
+        noteTextView.layer.cornerRadius = 5
         noteTextView.leftAnchor.constraint(equalTo: myView.leftAnchor, constant: 8).isActive = true
         noteTextView.rightAnchor.constraint(equalTo: myView.rightAnchor, constant: -8).isActive = true
         noteTextView.topAnchor.constraint(equalTo: tagsWST.bottomAnchor, constant: 4).isActive = true
@@ -267,8 +269,8 @@ class NoteViewController: UIViewController {
                 self.notebookPickerView.selectRow(index, inComponent: 0, animated: false)
             }
         }
-        
     }
+    
 }
 
 

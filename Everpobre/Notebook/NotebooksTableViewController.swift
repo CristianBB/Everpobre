@@ -45,6 +45,8 @@ class NotebooksTableViewController: UITableViewController {
         }
     }
     
+    var pickOptions:[Notebook] = []
+    
     init() {
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
         title = NSLocalizedString("Notebooks", comment: "")
@@ -120,7 +122,7 @@ extension NotebooksTableViewController {
         return notebook
     }
     
-    // Return Note associated to an IndexPath
+    // Returns Note associated to an IndexPath
     func getNote(atIndexPath indexPath: IndexPath) -> Note {
         let notebook = getNotebook(atSection: indexPath.section)
         
@@ -138,6 +140,16 @@ extension NotebooksTableViewController {
         let note = notesArray[indexPath.row]
         
         return note
+    }
+    
+    // Returns Default Notebook
+    func getDefaultNotebook() -> Notebook? {
+        let req = Notebook.fetchRequest()
+        req.fetchLimit = 1
+        req.predicate = NSPredicate(format: "defaultNotebook == %@", NSNumber(booleanLiteral: true))
+        guard let results = try? CoreDataContainer.default.viewContext.fetch(req) as! [Notebook] else { return nil}
+        let defaultNotebook = results[0]
+        return defaultNotebook
     }
     
     func executeSearch(){
@@ -184,7 +196,6 @@ extension NotebooksTableViewController {
                 if (noteAct.objectID == note.objectID) {
                     return IndexPath(row: row, section: section)
                 }
-                
             }
         }
         
@@ -232,11 +243,7 @@ extension NotebooksTableViewController {
     @objc func addNoteButtonPressed() {
         
         // Get Default Notebook
-        let req = Notebook.fetchRequest()
-        req.fetchLimit = 1
-        req.predicate = NSPredicate(format: "defaultNotebook == %@", NSNumber(booleanLiteral: true))
-        guard let results = try? CoreDataContainer.default.viewContext.fetch(req) as! [Notebook] else {return}
-        let defaultNotebook = results[0]
+        guard let defaultNotebook = getDefaultNotebook() else { return }
         
         // Add Note
         let newNote = Note(notebook: defaultNotebook, inContext: CoreDataContainer.default.viewContext)
@@ -272,5 +279,85 @@ extension NotebooksTableViewController {
         
         present(alertController, animated: true, completion: nil)
     }
+    
+    func deleteNotebookWithoutUpdating(notebook: Notebook) {
+        // Get note Displayed on detail por sync purposes
+        if let noteDisplayed = self.getNoteDisplayed() {
+            // If one of the notes from the Notebook to be deleted is being showed, change detail view
+            if (notebook.notes.contains(noteDisplayed)) {
+                let instructionsVC = InstructionsViewController()
+                self.splitViewController?.showDetailViewController(instructionsVC, sender: self)
+            }
+        }
+        
+        // Remove notebook
+        CoreDataContainer.default.viewContext.delete(notebook)
+        
+        // Save changes
+        self.saveChanges()
+    }
+    
+    // AllertController to associate all Notes from a Notebook to a new Notebook selected by user and DELETE notebook
+    func deleteNotebookUpdatingNotes(notebook: Notebook) {
+        self.loadPickOptions(forNotebook: notebook)
+        
+        let vc = UIViewController()
+        vc.preferredContentSize = CGSize(width: 250,height: 300)
+        
+        let pickerView = UIPickerView(frame: CGRect(x: 0, y: 0, width: 250, height: 300))
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        vc.view.addSubview(pickerView)
+        
+        let chooseNotebookAlert = UIAlertController(title: NSLocalizedString("Select Notebook", comment: ""), message: "", preferredStyle: .alert)
+        chooseNotebookAlert.setValue(vc, forKey: "contentViewController")
+        
+        let selectAction = UIAlertAction(title: NSLocalizedString("Select", comment: ""), style: .default, handler: { alert -> Void in
+            let selectedNotebook = self.pickOptions[pickerView.selectedRow(inComponent: 0)]
+
+            // Get note Displayed on detail por sync purposes
+            let noteDisplayed = self.getNoteDisplayed()
+            
+            // Update Notes from Notebook to remove
+            for noteAct in notebook.notes as! Set<Note> {
+                noteAct.notebook = selectedNotebook
+                
+                // if note displayed is one of the notes updated, shows it
+                if (noteAct.objectID == noteDisplayed?.objectID) {
+                    self.showNote(note: noteAct)
+                }
+            }
+            
+            // Remove notebook
+            CoreDataContainer.default.viewContext.delete(notebook)
+            
+            // Save changes
+            self.saveChanges()
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+        
+        chooseNotebookAlert.addAction(selectAction)
+        chooseNotebookAlert.addAction(cancelAction)
+        
+        self.present(chooseNotebookAlert, animated: true)
+      
+    }
+    
+    // Load pickOptions excluding Notebook to be removed
+    func loadPickOptions(forNotebook notebook: Notebook) {
+        pickOptions = []
+        
+        // Only add Notebooks distincts to Notebook to be removed
+        if let fc = fetchedResultsController {
+            for notebookAct in fc.fetchedObjects as! [Notebook] {
+                if (notebook.objectID != notebookAct.objectID) {
+                    pickOptions.append(notebookAct)
+                }
+            }
+        }
+    }
+    
 }
 

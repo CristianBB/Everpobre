@@ -68,6 +68,14 @@ class NotebookHeader: UIView {
         return imageView
     }()
     
+    let addNoteButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.frame.size = CGSize(width: 30, height: 30)
+        button.setImage(#imageLiteral(resourceName: "addNote.png"), for: .normal)
+        button.addTarget(self, action: #selector(addNoteToNotebook), for: .touchDown)
+        return button
+    }()
     
     init(frame: CGRect, model: Notebook, isEditing: Bool) {
         self.model = model
@@ -82,7 +90,7 @@ class NotebookHeader: UIView {
     }
     
     func setupUI() {
-        backgroundColor = .cyan
+        backgroundColor = UIColor(red:0.03, green:0.64, blue:0.65, alpha:1.0)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
@@ -109,29 +117,37 @@ class NotebookHeader: UIView {
         
         defaultView.addSubview(nameLabel)
         nameLabel.topAnchor.constraint(equalTo: defaultView.topAnchor, constant: 4).isActive = true
-        nameLabel.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 8).isActive = true
+        var leftAnchorNameLabel = nameLabel.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 8)
         nameLabel.rightAnchor.constraint(equalTo: defaultView.rightAnchor, constant: -40).isActive = true
+        leftAnchorNameLabel.isActive = true
         
         defaultView.addSubview(creationDateLabel)
         creationDateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4).isActive = true
         creationDateLabel.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 8).isActive = true
         creationDateLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
+        if (model.isDefaultNotebook) {
+            // defaultImage
+            defaultView.addSubview(defaultImage)
+            defaultImage.topAnchor.constraint(equalTo: defaultView.topAnchor, constant: 4).isActive = true
+            defaultImage.leftAnchor.constraint(equalTo: defaultView.leftAnchor, constant: 4).isActive = true
+            defaultImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
+            defaultImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            
+            // Change nameLabel position
+            leftAnchorNameLabel.isActive = false
+            leftAnchorNameLabel = nameLabel.leftAnchor.constraint(equalTo: defaultImage.rightAnchor, constant: 4)
+            leftAnchorNameLabel.isActive = true
+        }
+        
         if (isEditing) {
             addLeftEditView()
             
         } else {
-            nameLabel.isUserInteractionEnabled = false
-            leftAnchorDefaultView?.isActive = true
-            if (model.isDefaultNotebook) {
-                // defaultImage
-                defaultView.addSubview(defaultImage)
-                defaultImage.topAnchor.constraint(equalTo: defaultView.topAnchor, constant: 4).isActive = true
-                defaultImage.rightAnchor.constraint(equalTo: defaultView.rightAnchor, constant: -4).isActive = true
-                defaultImage.widthAnchor.constraint(equalToConstant: 20).isActive = true
-                defaultImage.heightAnchor.constraint(equalToConstant: 20).isActive = true
-            }
-            
+            // addNote button
+            defaultView.addSubview(addNoteButton)
+            addNoteButton.rightAnchor.constraint(equalTo: defaultView.rightAnchor).isActive = true
+            addNoteButton.centerYAnchor.constraint(equalTo: defaultView.centerYAnchor).isActive = true
         }
     }
 }
@@ -158,24 +174,21 @@ extension NotebookHeader {
         
         // Edit Button
         let editButton = UIButton(type: .custom)
+        editButton.translatesAutoresizingMaskIntoConstraints = false
         editButton.frame.size = CGSize(width: 30, height: 30)
         editButton.setImage(#imageLiteral(resourceName: "edit.png"), for: .normal)
-        editButton.layer.masksToBounds = false
-        editButton.layer.cornerRadius = editButton.frame.width / 2
         editButton.addTarget(self, action: #selector(addRightEditView), for: .touchDown)
         
         leftEditView.addSubview(editButton)
-        leftEditView.translatesAutoresizingMaskIntoConstraints = false
-        editButton.leftAnchor.constraint(equalTo: leftEditView.leftAnchor).isActive = true
-        editButton.topAnchor.constraint(equalTo: leftEditView.topAnchor).isActive = true
+        editButton.rightAnchor.constraint(equalTo: leftEditView.rightAnchor).isActive = true
+        editButton.centerYAnchor.constraint(equalTo: leftEditView.centerYAnchor).isActive = true
     }
     
     @objc func addRightEditView() {
-        rightEditView.backgroundColor = .red
         addSubview(rightEditView)
         rightEditView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         rightEditView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        rightEditView.widthAnchor.constraint(equalToConstant: 190).isActive = true
+        rightEditView.widthAnchor.constraint(equalToConstant: 90).isActive = true
         rightEditView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
         // Change defaultView position
@@ -197,7 +210,43 @@ extension NotebookHeader {
         tapGesture.numberOfTapsRequired = 1
         defaultView.isUserInteractionEnabled = true
         defaultView.addGestureRecognizer(tapGesture)
-
+        
+        // delete Button
+        let deleteButton = UIButton(type: .custom)
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        deleteButton.frame.size = CGSize(width: 30, height: 30)
+        deleteButton.setImage(#imageLiteral(resourceName: "delete.png"), for: .normal)
+        deleteButton.addTarget(self, action: #selector(deleteNotebook), for: .touchDown)
+        
+        rightEditView.addSubview(deleteButton)
+        deleteButton.rightAnchor.constraint(equalTo: rightEditView.rightAnchor).isActive = true
+        deleteButton.centerYAnchor.constraint(equalTo: rightEditView.centerYAnchor).isActive = true
+        
+        // editName Button
+        let editNameButton = UIButton(type: .custom)
+        editNameButton.translatesAutoresizingMaskIntoConstraints = false
+        editNameButton.frame.size = CGSize(width: 30, height: 30)
+        editNameButton.setImage(#imageLiteral(resourceName: "edit.png"), for: .normal)
+        editNameButton.addTarget(self, action: #selector(editName), for: .touchDown)
+        
+        rightEditView.addSubview(editNameButton)
+        editNameButton.rightAnchor.constraint(equalTo: deleteButton.leftAnchor, constant: -4).isActive = true
+        editNameButton.centerYAnchor.constraint(equalTo: rightEditView.centerYAnchor).isActive = true
+        
+        // setDefault Button
+        if (model.isDefaultNotebook == false) {
+            let setDefault = UIButton(type: .custom)
+            setDefault.translatesAutoresizingMaskIntoConstraints = false
+            setDefault.frame.size = CGSize(width: 30, height: 30)
+            setDefault.setImage(#imageLiteral(resourceName: "noDefaultNotebook.png"), for: .normal)
+            setDefault.layer.masksToBounds = false
+            setDefault.layer.cornerRadius = setDefault.frame.width / 2
+            setDefault.addTarget(self, action: #selector(setDefaultNotebook), for: .touchDown)
+            
+            rightEditView.addSubview(setDefault)
+            setDefault.rightAnchor.constraint(equalTo: editNameButton.leftAnchor, constant: -4).isActive = true
+            setDefault.centerYAnchor.constraint(equalTo: rightEditView.centerYAnchor).isActive = true
+        }
         
     }
     
@@ -226,15 +275,15 @@ extension NotebookHeader {
         self.delegate?.editNotebookName(notebook: model)
     }
     
-    func addNoteToNotebook() {
+    @objc func addNoteToNotebook() {
         self.delegate?.addNoteToNotebook(notebook: model)
     }
     
-    func deleteNotebook() {
+    @objc func deleteNotebook() {
         self.delegate?.deleteNotebook(notebook: model)
     }
     
-    func setDefaultNotebook() {
+    @objc func setDefaultNotebook() {
         self.delegate?.setDefaultNotebook(notebook: model)
     }
 }

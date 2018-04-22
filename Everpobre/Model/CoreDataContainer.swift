@@ -60,13 +60,15 @@ func loadFakeCoreData() {
     let context = CoreDataContainer.default.viewContext
     
     // Notebook por defecto
-    let nbdefecto = Notebook(isDefaultNotebook: true, name: "z", inContext: context)
+    let nbdefecto = Notebook(isDefaultNotebook: true, name: "Default Notebook", inContext: context)
     
     // Notebook nuevo
-    let nbnuevo = Notebook(isDefaultNotebook: false, name: "b", inContext: context)
-    let nbnuevo2 = Notebook(isDefaultNotebook: false, name: "a", inContext: context)
+    let nbnuevo = Notebook(isDefaultNotebook: false, name: "Todo", inContext: context)
+    let nbnuevo2 = Notebook(isDefaultNotebook: false, name: "Notes", inContext: context)
     
     // Notas
+    let lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et tempus sem. Aenean sed dolor ex. Duis at tellus a magna consectetur ullamcorper tristique sit amet nisi. Proin enim orci, rutrum in sem in, faucibus finibus turpis. Morbi scelerisque enim at sapien auctor iaculis. Quisque interdum leo quis arcu cursus dictum. Aenean elit lorem, porta malesuada mollis at, egestas quis nibh. Morbi feugiat nunc purus, in posuere sapien tincidunt a. Aenean tempor eros sapien, sed pulvinar velit volutpat ac. Etiam ut eros dui. Nunc ultricies dolor ac orci rutrum fermentum. Nulla et nunc vel est tempus ornare. Nulla suscipit felis nec gravida ullamcorper. Suspendisse neque lacus, lobortis ac diam id, fermentum suscipit justo. Quisque lobortis sit amet sapien et fringilla. Nullam vel elit et diam consequat ultrices quis at elit. Donec nec posuere elit. Morbi sed efficitur ligula. Etiam imperdiet rhoncus dignissim. Vestibulum et velit enim. Donec nec luctus lectus, eu tincidunt purus."
+    
     let nota1 = Note(notebook: nbdefecto, inContext: context)
     let nota2 = Note(notebook: nbdefecto, inContext: context)
     let nota3 = Note(notebook: nbnuevo, inContext: context)
@@ -78,38 +80,26 @@ func loadFakeCoreData() {
     let nota9 = Note(notebook: nbnuevo, inContext: context)
     let nota10 = Note(notebook: nbnuevo2, inContext: context)
     nota1.title = "Nota01"
+    nota1.text = lorem
     nota2.title = "Nota02"
+    nota2.text = lorem
     nota3.title = "Nota03"
+    nota3.text = lorem
     nota4.title = "Nota04"
+    nota4.text = lorem
     nota5.title = "Nota05"
+    nota5.text = lorem
     nota6.title = "Nota06"
+    nota6.text = lorem
     nota7.title = "Nota07"
+    nota7.text = lorem
     nota8.title = "Nota08"
+    nota8.text = lorem
     nota9.title = "Nota09"
+    nota9.text = lorem
     nota10.title = "Nota10"
+    nota10.text = lorem
     
-    // Imagenes
-    let testImage = #imageLiteral(resourceName: "imagencita.png")
-    let targetWidth: CGFloat = 200.0
-    let scaleFactor = targetWidth / testImage.size.width
-    let targetHeight = testImage.size.height * scaleFactor
-    let targetSize = CGSize(width: targetWidth, height: targetHeight)
-    let rect = CGRect(x: 0, y: 0, width: targetSize.width, height: targetSize.height)
-    UIGraphicsBeginImageContextWithOptions(targetSize, false, 1.0)
-    testImage.draw(in: rect)
-    let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota1, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota2, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota3, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota4, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota5, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota6, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota7, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota8, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota9, inContext: context)
-    _ = NoteImage(image: scaledImage!, positionFrame: rect, note: nota10, inContext: context)
  
     if context.hasChanges{
         do{

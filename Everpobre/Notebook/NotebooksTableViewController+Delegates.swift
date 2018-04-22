@@ -48,15 +48,77 @@ extension NotebooksTableViewController: NoteViewControllerDelegate {
 // MARK: - NotebookHeaderDelegate
 extension NotebooksTableViewController: NotebookHeaderDelegate {
     func addNoteToNotebook(notebook: Notebook) {
+        // Add Note
+        let newNote = Note(notebook: notebook, inContext: CoreDataContainer.default.viewContext)
         
+        // Show note added on detail
+        self.showNote(note: newNote)
+        
+        // Save
+        self.saveChanges()
     }
     
     func deleteNotebook(notebook: Notebook) {
-        
+        if (notebook.isDefaultNotebook) {
+            let title = NSLocalizedString("Not Allowed", comment: "")
+            let message = NSLocalizedString("Default Notebook cannot be deleted", comment: "")
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: NSLocalizedString("Ok", comment: ""), style: .destructive)
+            
+            alertController.addAction(okAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+            
+        } else {
+            
+            let title = NSLocalizedString("Delete Notebook", comment: "")
+            var message = ""
+            var action1: UIAlertAction?
+            var action2: UIAlertAction?
+            
+            if (notebook.notes.count == 0) {
+                message = NSLocalizedString("This action cannot be undone, are you sure?", comment: "")
+                action1 = UIAlertAction(title: NSLocalizedString("YES", comment: ""), style: .default, handler:  { alert -> Void in
+                    self.deleteNotebookWithoutUpdating(notebook: notebook)
+                })
+            } else {
+                message = NSLocalizedString("This notebook has associated notes, what do you want to do?", comment: "")
+                
+                action1 = UIAlertAction(title: NSLocalizedString("DELETE Notebook", comment: ""), style: .default, handler:  { alert -> Void in
+                    self.deleteNotebookWithoutUpdating(notebook: notebook)
+                })
+                
+                action2 = UIAlertAction(title: NSLocalizedString("ASSOCIATE notes to another book", comment: ""), style: .default, handler:  { alert -> Void in
+                    self.deleteNotebookUpdatingNotes(notebook: notebook)
+                })
+            }
+            
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+            let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil)
+            
+            alertController.addAction(action1!)
+            if (action2 != nil) {
+                alertController.addAction(action2!)
+            }
+            alertController.addAction(cancelAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     func setDefaultNotebook(notebook: Notebook) {
+        // Get default Notebook
+        guard let defaultNotebook = getDefaultNotebook() else { return }
         
+        // Update default Notebook
+        defaultNotebook.isDefaultNotebook = false
+        
+        // Update notebook received and sets as new default notebook
+        notebook.isDefaultNotebook = true
+        
+        // Save changes
+        self.saveChanges()
     }
     
     func editNotebookName(notebook: Notebook) {
@@ -79,5 +141,9 @@ extension NotebooksTableViewController: NotebookHeaderDelegate {
         self.present(alertController, animated: true, completion: nil)
     }
     
+}
+
+// MARK: - UIPickerViewDelegate
+extension NotebooksTableViewController: UIPickerViewDelegate {
     
 }

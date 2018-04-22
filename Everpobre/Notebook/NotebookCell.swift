@@ -75,7 +75,7 @@ class NotebookCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         accessibilityIdentifier = note?.objectID.uriRepresentation().absoluteString
-        backgroundColor = .white
+        backgroundColor = UIColor(red:0.57, green:1.00, blue:1.00, alpha:1.0)
         
         contentView.addSubview(titleLabel)
         titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4).isActive = true
