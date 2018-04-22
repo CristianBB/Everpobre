@@ -74,13 +74,7 @@ func loadData() {
     let context = CoreDataContainer.default.viewContext
     
     // Notebook por defecto
-    let defaultNotebook = Notebook(isDefaultNotebook: true, name: NSLocalizedString("My Notebook", comment: ""), inContext: context)
-    
-    // First Note
-    let noteText = "Bienvenido a EverPobre\nEstas son algunas de las características de la aplicación\n- Agrega Notas rápidas mediante el icono de la barra de navegación. Las notas agregadas desde aquí serán incluidas directamente en la libreta definida por defecto\n- Si quieres agregar una nota directamente a una libreta, utiliza el botón de agregar nota asociado a la Libreta a la que desees añadir la nota\n- Para agregar una imagen a una nota únicamente debes realizar una pulsación larga sobre un área vacía dentro del área de texto de la nota. Al realizar la acción podrás seleccionar como quieres añadir la imagen: Desde la galería, Desde la Camara de fotos o introduciendo una localización para agregar un mapa a la nota.\n- Para entrar en el modo Edición de imagen, pulsa dos veces sobre la imagen hasta que veas que aparece un borde de color rojo a su alrededor. En el modo edición podrás rotar la imagen (mediante deslizamientos a izquierda o derecha), escalarla (realizando un pinzamiento con los dedos), o eliminarla (realizando un desplazamiento hacia abajo)\n- Mueve las imágenes libremente por el interior de la nota. Para mover una imagen simplemente tienes que realizar una pulsación larga sobre la imagen que deseas mover hasta que aparezca un borde de color verde a su alrededor.\n- Para eliminar una Nota, pulsa el icono de Edición de la barra de navegación para entrar en el modo de Edición. Aparecerá un botón que te permitirá seleccionar la nota que desees eliminar\n- Para editar, eliminar o poner por defecto una libreta procede del mismo modo que para editar una Nota. Cada libreta tiene un botón de edición asociado que, una vez pulsado, te permitirá acceder a las distintas opciones de edición de la libreta.\nDisfruta la aplicación!\n"
-    let defaultNote = Note(notebook: defaultNotebook, inContext: context)
-    defaultNote.title = "Bienvenido a Everpobre"
-    defaultNote.text = noteText
+    let _ = Notebook(isDefaultNotebook: true, name: NSLocalizedString("My Notebook", comment: ""), inContext: context)
     
     if context.hasChanges{
         do{
