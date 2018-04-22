@@ -1,0 +1,9 @@
+{
+  "commitish" : "2.1.2",
+  "iOS" : [
+    {
+      "name" : "WSTagsField",
+      "hash" : "f9d4c28cd88e2b4847019de67e324c1c6a43ed497f1de1c343f022a130bbba3b"
+    }
+  ]
+}
