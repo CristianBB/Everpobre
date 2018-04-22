@@ -32,6 +32,7 @@ extension NoteViewController: UIImagePickerControllerDelegate, UINavigationContr
             // Add image
             let imageAdded = NoteImage(image: scaledImage!, positionFrame: newPosition, note: model, inContext: CoreDataContainer.default.viewContext)
             addImageToView(imageAdded)
+            view.setNeedsLayout()
         }
         
         picker.dismiss(animated: true, completion: nil)

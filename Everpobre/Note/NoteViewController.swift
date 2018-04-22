@@ -241,7 +241,8 @@ class NoteViewController: UIViewController {
         for noteImageAct in modelImages {
             addImageToView(noteImageAct)
         }
-        
+        view.setNeedsLayout()
+
     }
     
     // Add an image inside noteTextView

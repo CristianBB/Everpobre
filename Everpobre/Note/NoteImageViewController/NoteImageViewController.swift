@@ -27,8 +27,9 @@ class NoteImageViewController: UIImageView {
         self.model = model
         super.init(image: model.image)
         
-        self.contentMode = UIViewContentMode.scaleAspectFit
+        self.contentMode = .scaleAspectFit
         self.isUserInteractionEnabled = true
+        
         syncModelWithView()
     }
     
@@ -60,6 +61,7 @@ extension NoteImageViewController {
     // Returns a rectangle around the view for exclusion path purposes
     var marginRect:CGRect {
         get {
+
             return self.frame.insetBy(dx: -10, dy: -10)
         }
     }

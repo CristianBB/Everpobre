@@ -42,11 +42,11 @@ extension NoteImageViewController {
         let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        // Calculates new Actual Frame
+        // Calculate new Actual Frame
         let oldActualFrame = model.actualFrame
         let newActualFrame = CGRect(x: oldActualFrame.origin.x, y: oldActualFrame.origin.y, width: newImage.size.width, height: newImage.size.height)
         
-        // Calculates new Original Frame
+        // Calculate new Original Frame
         let oldOriginalFrame = model.actualFrame
         let newOriginalFrame = CGRect(x: oldOriginalFrame.origin.x, y: oldOriginalFrame.origin.y, width: newImage.size.width, height: newImage.size.height)
         
