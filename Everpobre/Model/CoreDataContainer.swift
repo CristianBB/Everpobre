@@ -60,7 +60,7 @@ func storeLoaded() -> Bool {
     let req = Notebook.fetchRequest()
     req.fetchLimit = 1
 
-    guard let results = try? context.fetch(req) as! [Note]  else { return false }
+    guard let results = try? context.fetch(req) as! [Notebook]  else { return false }
     
     if (results.count == 0) {
         return false
