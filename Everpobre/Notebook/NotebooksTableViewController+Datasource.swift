@@ -36,8 +36,9 @@ extension NotebooksTableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let fc = fetchedResultsController{
             let notebook = fc.object(at: IndexPath(row: section, section: 0)) as! Notebook
-            let headerView = NotebookHeader(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.sectionHeaderHeight))
-            headerView.notebook = notebook
+            let headerFrame = CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.sectionHeaderHeight)
+            let headerView = NotebookHeader(frame: headerFrame, model:notebook, isEditing: tableView.isEditing)
+            headerView.delegate = self
             return headerView
         }else{
             return nil

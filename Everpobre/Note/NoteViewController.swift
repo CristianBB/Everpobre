@@ -141,7 +141,7 @@ class NoteViewController: UIViewController {
         myView.addSubview(titleTextField)
         titleTextField.placeholder = NSLocalizedString("Note Title", comment: "")
         titleTextField.title = NSLocalizedString("Title", comment: "")
-        titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingChanged)
+        titleTextField.addTarget(self, action: #selector(titleTextFieldChanged), for: .editingDidEnd)
         titleTextField.backgroundColor = .cyan
         
         titleTextField.leftAnchor.constraint(equalTo: guide.leftAnchor, constant: 8).isActive = true
@@ -247,8 +247,6 @@ class NoteViewController: UIViewController {
         let noteImageView = NoteImageViewController(model: image)
         noteImageView.delegate = self as NoteImageViewControllerDelegate
         noteTextView.addSubview(noteImageView)
-        
-        
     }
     
     // Get Notebooks to define pick options for notebookPickerView
@@ -256,10 +254,19 @@ class NoteViewController: UIViewController {
         // Get all Notebooks
         let req = Notebook.fetchRequest()
         req.fetchBatchSize = 50
+        req.sortDescriptors = [ NSSortDescriptor(key: NotebookAttributes.defaultNotebook.rawValue, ascending: false),
+                                            NSSortDescriptor(key: NotebookAttributes.name.rawValue, ascending: true)]
         guard let results = try? CoreDataContainer.default.viewContext.fetch(req) as! [Notebook] else {return}
     
         self.pickOptions = results
         self.notebookPickerView.reloadAllComponents()
+        
+        // Get index for actual notebook selected and sets notebookPicker selected
+        for index in 0..<self.pickOptions.count {
+            if (self.pickOptions[index].name == self.model.notebook.name) {
+                self.notebookPickerView.selectRow(index, inComponent: 0, animated: false)
+            }
+        }
         
     }
 }

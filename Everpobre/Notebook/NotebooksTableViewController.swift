@@ -151,12 +151,12 @@ extension NotebooksTableViewController {
         }
     }
     
-    // Get Note displayed on detail if there is a Note displayed, if not return nil
+    // Returns Note displayed on detail if there is a Note displayed, if not return nil
     func getNoteDisplayed() -> Note? {
         var noteDisplayed: Note?
         
-        // If splitViewController is collapsed, we dont care about note displayed
-        if (self.splitViewController?.isCollapsed)! {
+        // If splitViewController is collapsed or Detail not exists, we dont care about note displayed
+        if ((self.splitViewController?.isCollapsed)! || self.splitViewController?.viewControllers.count == 0) {
             return nil
         } else {
             // Get reference to actual detail view
@@ -164,25 +164,40 @@ extension NotebooksTableViewController {
             for actVC in detailNavVC.viewControllers {
                 if let detailVC = actVC as? NoteViewController {
                     noteDisplayed = detailVC.model
+                    return noteDisplayed
                 }
             }
         }
         
-        return noteDisplayed
+        return nil
+    }
+    
+    // Returns IndexPath for a Note
+    func getIndexPath(forNote note: Note) -> IndexPath? {
+        
+        // Iterate throuth sections
+        for section in 0..<tableView.numberOfSections {
+            // Iterate throug cells
+            for row in 0..<tableView.numberOfRows(inSection: section) {
+                // Search for Note on fetchedResultsController that matches with Note displayed and selects it
+                let noteAct = self.getNote(atIndexPath: IndexPath(row: row, section: section))
+                if (noteAct.objectID == note.objectID) {
+                    return IndexPath(row: row, section: section)
+                }
+                
+            }
+        }
+        
+        return nil
     }
     
     // Sync row selected with detail VC displayed
     func syncRowWithDetail() {
         
         guard let noteDisplayed = getNoteDisplayed() else { return }
+        guard let indexPath = getIndexPath(forNote: noteDisplayed) else { return }
+        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
         
-        // Get the cell that matches with Note displayed and selects it
-        let cells = self.tableView.visibleCells
-        for cell in cells {
-            if (cell.accessibilityIdentifier == noteDisplayed.objectID.uriRepresentation().absoluteString) {
-                self.tableView.selectRow(at: self.tableView.indexPath(for: cell), animated: true, scrollPosition: .bottom)
-            }
-        }
     }
     
     // Show Note in Detail
@@ -193,14 +208,27 @@ extension NotebooksTableViewController {
         self.splitViewController?.showDetailViewController(noteNavVC, sender: self)
     }
     
+    // User press edit button
     @objc func editButtonPressed() {
+        // CATransaction to keep rows animation while activate/deactivate edition mode
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            // Reload sections to activate/deactivate edition mode when  animation finish
+            let range: Range = 0..<self.tableView.numberOfSections
+            let sections = IndexSet(integersIn: range)
+            
+            self.tableView.reloadSections(sections, with: .none)
+        }
         if (tableView.isEditing) {
             tableView.setEditing(false, animated: true)
         } else {
             tableView.setEditing(true, animated: true)
         }
+        CATransaction.commit()
+        
     }
     
+    // User press addNote button
     @objc func addNoteButtonPressed() {
         
         // Get Default Notebook
@@ -221,8 +249,8 @@ extension NotebooksTableViewController {
         
     }
     
+    // User press addNotebook button
     @objc func addNotebookButtonPressed() {
-        
         
         let alertController = UIAlertController(title: NSLocalizedString("New Notebook", comment: ""), message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
