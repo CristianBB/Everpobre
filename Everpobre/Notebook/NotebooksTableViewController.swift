@@ -61,7 +61,8 @@ class NotebooksTableViewController: UITableViewController {
         super.viewDidLoad()
         
         let context = CoreDataContainer.default.viewContext
-    
+        tableView.tableFooterView = UIView()
+        
         let editButton = UIButton(type: .system)
         editButton.setImage(#imageLiteral(resourceName: "edit.png"), for: .normal)
         editButton.addTarget(self, action: #selector(editButtonPressed), for: .touchUpInside)
