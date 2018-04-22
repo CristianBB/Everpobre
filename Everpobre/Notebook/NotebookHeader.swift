@@ -10,10 +10,10 @@ import UIKit
 
 // MARK: - Delegate Protocol
 protocol NotebookHeaderDelegate: class {
-    func editNotebookName(notebook: Notebook)
-    func addNoteToNotebook(notebook: Notebook)
-    func deleteNotebook(notebook: Notebook)
-    func setDefaultNotebook(notebook: Notebook)
+    func editNotebookName(notebook: Notebook, sender: UIView)
+    func addNoteToNotebook(notebook: Notebook, sender: UIView)
+    func deleteNotebook(notebook: Notebook, sender: UIView)
+    func setDefaultNotebook(notebook: Notebook, sender: UIView)
 }
 
 class NotebookHeader: UIView {
@@ -271,19 +271,19 @@ extension NotebookHeader {
         addLeftEditView()
     }
     
-    @objc func editName() {
-        self.delegate?.editNotebookName(notebook: model)
+    @objc func editName(_ sender:UIButton) {
+        self.delegate?.editNotebookName(notebook: model, sender: sender)
     }
     
-    @objc func addNoteToNotebook() {
-        self.delegate?.addNoteToNotebook(notebook: model)
+    @objc func addNoteToNotebook(_ sender:UIButton) {
+        self.delegate?.addNoteToNotebook(notebook: model, sender: sender)
     }
     
-    @objc func deleteNotebook() {
-        self.delegate?.deleteNotebook(notebook: model)
+    @objc func deleteNotebook(_ sender:UIButton) {
+        self.delegate?.deleteNotebook(notebook: model, sender: sender)
     }
     
-    @objc func setDefaultNotebook() {
-        self.delegate?.setDefaultNotebook(notebook: model)
+    @objc func setDefaultNotebook(_ sender:UIButton) {
+        self.delegate?.setDefaultNotebook(notebook: model, sender: sender)
     }
 }

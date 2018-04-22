@@ -47,7 +47,7 @@ extension NotebooksTableViewController: NoteViewControllerDelegate {
 
 // MARK: - NotebookHeaderDelegate
 extension NotebooksTableViewController: NotebookHeaderDelegate {
-    func addNoteToNotebook(notebook: Notebook) {
+    func addNoteToNotebook(notebook: Notebook, sender: UIView) {
         // Add Note
         let newNote = Note(notebook: notebook, inContext: CoreDataContainer.default.viewContext)
         
@@ -58,7 +58,7 @@ extension NotebooksTableViewController: NotebookHeaderDelegate {
         self.saveChanges()
     }
     
-    func deleteNotebook(notebook: Notebook) {
+    func deleteNotebook(notebook: Notebook, sender: UIView) {
         if (notebook.isDefaultNotebook) {
             let title = NSLocalizedString("Not Allowed", comment: "")
             let message = NSLocalizedString("Default Notebook cannot be deleted", comment: "")
@@ -103,11 +103,12 @@ extension NotebooksTableViewController: NotebookHeaderDelegate {
             }
             alertController.addAction(cancelAction)
             
+            alertController.popoverPresentationController?.sourceView = sender
             self.present(alertController, animated: true, completion: nil)
         }
     }
     
-    func setDefaultNotebook(notebook: Notebook) {
+    func setDefaultNotebook(notebook: Notebook, sender: UIView) {
         // Get default Notebook
         guard let defaultNotebook = getDefaultNotebook() else { return }
         
@@ -121,7 +122,7 @@ extension NotebooksTableViewController: NotebookHeaderDelegate {
         self.saveChanges()
     }
     
-    func editNotebookName(notebook: Notebook) {
+    func editNotebookName(notebook: Notebook, sender: UIView) {
         let alertController = UIAlertController(title: NSLocalizedString("Edit Notebook Name", comment: ""), message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = NSLocalizedString("Notebook Name", comment: "")

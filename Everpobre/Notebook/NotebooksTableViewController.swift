@@ -286,7 +286,7 @@ extension NotebooksTableViewController {
         if let noteDisplayed = self.getNoteDisplayed() {
             // If one of the notes from the Notebook to be deleted is being showed, change detail view
             if (notebook.notes.contains(noteDisplayed)) {
-                let instructionsVC = InstructionsViewController()
+                let instructionsVC = BlankViewController()
                 self.splitViewController?.showDetailViewController(instructionsVC, sender: self)
             }
         }

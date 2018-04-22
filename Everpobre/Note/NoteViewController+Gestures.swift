@@ -134,6 +134,9 @@ extension NoteViewController {
             actionSheetAlert.addAction(useLocation)
             actionSheetAlert.addAction(cancel)
             
+            actionSheetAlert.popoverPresentationController?.sourceView = self.noteTextView
+            actionSheetAlert.popoverPresentationController?.sourceRect = CGRect(x: longPressGesture.location(in: self.noteTextView).x, y: longPressGesture.location(in: self.noteTextView).y, width: 0, height: 0)
+            
             present(actionSheetAlert, animated: true, completion: nil)
             
         } else if (longPressGesture.state == .ended || longPressGesture.state == .cancelled) {

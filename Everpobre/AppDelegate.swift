@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         //loadFakeCoreData()
         
         let masterVC = UINavigationController(rootViewController: NotebooksTableViewController())
-        let detailVC = InstructionsViewController()
+        let detailVC = BlankViewController()
         
         let splitVC = UISplitViewController()
         splitVC.delegate = self

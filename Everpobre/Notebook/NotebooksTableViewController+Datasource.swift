@@ -97,7 +97,7 @@ extension NotebooksTableViewController {
                 // Check if note Displayed is the same that the Note deleted to change DetailVC
                 if let noteDisplayed = self.getNoteDisplayed() {
                     if (noteDisplayed.objectID == note.objectID) {
-                        let instructionsVC = InstructionsViewController()
+                        let instructionsVC = BlankViewController()
                         self.splitViewController?.showDetailViewController(instructionsVC, sender: self)
                     }
                 }
@@ -117,6 +117,7 @@ extension NotebooksTableViewController {
             actionSheetAlert.addAction(actionYes)
             actionSheetAlert.addAction(actionNo)
             
+            actionSheetAlert.popoverPresentationController?.sourceView = self.tableView.cellForRow(at: indexPath)
             present(actionSheetAlert, animated: true, completion: nil)
         }
     }

@@ -12,8 +12,8 @@
 		4011D5F42051CED100D3B262 /* EverpobreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011D5F32051CED100D3B262 /* EverpobreTests.swift */; };
 		4011D5FF2051CF2A00D3B262 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4011D5FE2051CF2A00D3B262 /* Launch Screen.storyboard */; };
 		40264E302088034400F0E256 /* Everpobre.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40264E2E2088034400F0E256 /* Everpobre.xcdatamodeld */; };
-		4028E5D92088DED900C3812D /* InstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028E5D72088DED900C3812D /* InstructionsViewController.swift */; };
-		4028E5DA2088DED900C3812D /* InstructionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4028E5D82088DED900C3812D /* InstructionsViewController.xib */; };
+		4028E5D92088DED900C3812D /* BlankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028E5D72088DED900C3812D /* BlankViewController.swift */; };
+		4028E5DA2088DED900C3812D /* BlankViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4028E5D82088DED900C3812D /* BlankViewController.xib */; };
 		4028E5DD2088E21300C3812D /* UISplitViewController+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028E5DC2088E21300C3812D /* UISplitViewController+Additions.swift */; };
 		40577A06208777E90075E2BE /* CoreDataContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40577A05208777E90075E2BE /* CoreDataContainer.swift */; };
 		409A32A4208A06050032F881 /* NoteViewController+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409A32A3208A06050032F881 /* NoteViewController+Events.swift */; };
@@ -70,8 +70,8 @@
 		4011D5F52051CED100D3B262 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4011D5FE2051CF2A00D3B262 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		40264E2F2088034400F0E256 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
-		4028E5D72088DED900C3812D /* InstructionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsViewController.swift; sourceTree = "<group>"; };
-		4028E5D82088DED900C3812D /* InstructionsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InstructionsViewController.xib; sourceTree = "<group>"; };
+		4028E5D72088DED900C3812D /* BlankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankViewController.swift; sourceTree = "<group>"; };
+		4028E5D82088DED900C3812D /* BlankViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlankViewController.xib; sourceTree = "<group>"; };
 		4028E5DC2088E21300C3812D /* UISplitViewController+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISplitViewController+Additions.swift"; sourceTree = "<group>"; };
 		40577A05208777E90075E2BE /* CoreDataContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataContainer.swift; sourceTree = "<group>"; };
 		409A32A3208A06050032F881 /* NoteViewController+Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteViewController+Events.swift"; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 				409A32BC208AAD540032F881 /* Strings */,
 				409A32B2208A29E20032F881 /* Assets */,
 				4028E5DB2088E1E600C3812D /* UIKitExtensions */,
-				4028E5D62088DEA900C3812D /* Instructions */,
+				4028E5D62088DEA900C3812D /* BlankView */,
 				409E2E7B2085156E00BDB7EB /* Notebook */,
 				409E2E7A2085156400BDB7EB /* Note */,
 				4030A7FC205717DB00AFE359 /* Model */,
@@ -175,13 +175,13 @@
 			path = EverpobreTests;
 			sourceTree = "<group>";
 		};
-		4028E5D62088DEA900C3812D /* Instructions */ = {
+		4028E5D62088DEA900C3812D /* BlankView */ = {
 			isa = PBXGroup;
 			children = (
-				4028E5D72088DED900C3812D /* InstructionsViewController.swift */,
-				4028E5D82088DED900C3812D /* InstructionsViewController.xib */,
+				4028E5D72088DED900C3812D /* BlankViewController.swift */,
+				4028E5D82088DED900C3812D /* BlankViewController.xib */,
 			);
-			path = Instructions;
+			path = BlankView;
 			sourceTree = "<group>";
 		};
 		4028E5DB2088E1E600C3812D /* UIKitExtensions */ = {
@@ -377,7 +377,7 @@
 				409A32C9208B95A40032F881 /* addBook.png in Resources */,
 				409A32B9208AAD390032F881 /* Localizable.strings in Resources */,
 				409A32AF208A0C0D0032F881 /* LocationViewController.xib in Resources */,
-				4028E5DA2088DED900C3812D /* InstructionsViewController.xib in Resources */,
+				4028E5DA2088DED900C3812D /* BlankViewController.xib in Resources */,
 				409A32CB208B95A40032F881 /* defaultNotebook.png in Resources */,
 				409A32B1208A29D20032F881 /* gpsFixed.png in Resources */,
 			);
@@ -437,7 +437,7 @@
 				4028E5DD2088E21300C3812D /* UISplitViewController+Additions.swift in Sources */,
 				409A32C3208B8F3D0032F881 /* NotebookHeader.swift in Sources */,
 				409D5BB52078E94E00690C4B /* NoteViewController.swift in Sources */,
-				4028E5D92088DED900C3812D /* InstructionsViewController.swift in Sources */,
+				4028E5D92088DED900C3812D /* BlankViewController.swift in Sources */,
 				409A32A6208A063B0032F881 /* NoteViewController+Gestures.swift in Sources */,
 				409E2E7D208516E100BDB7EB /* NoteImageViewController.swift in Sources */,
 				409A32A4208A06050032F881 /* NoteViewController+Events.swift in Sources */,
