@@ -4,7 +4,9 @@ Aplicación iOS para la gestión de notas organizadas en libretas.
 
 Práctica del VI BootCamp Development Mobile - KeepCoding.
 
-![Alt Text](./shortDemo.gif)
+![Tratamiento de Imagenes](./shortDemo.gif)
+
+![Seccion Personalizada](./customSection.gif)
 
 **Demo de funcionamiento** ![Everpobre](./demo.mov)
 
