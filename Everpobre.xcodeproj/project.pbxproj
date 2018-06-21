@@ -11,6 +11,8 @@
 		4011D5E62051CED100D3B262 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4011D5E52051CED100D3B262 /* Assets.xcassets */; };
 		4011D5F42051CED100D3B262 /* EverpobreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4011D5F32051CED100D3B262 /* EverpobreTests.swift */; };
 		4011D5FF2051CF2A00D3B262 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4011D5FE2051CF2A00D3B262 /* Launch Screen.storyboard */; };
+		4017127B20DC2AE3002FB8B6 /* WSTagsField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 409D5BBC207A245500690C4B /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4017127C20DC2AE7002FB8B6 /* SkyFloatingLabelTextField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 409D5BBA207A245000690C4B /* SkyFloatingLabelTextField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		40264E302088034400F0E256 /* Everpobre.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 40264E2E2088034400F0E256 /* Everpobre.xcdatamodeld */; };
 		4028E5D92088DED900C3812D /* BlankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4028E5D72088DED900C3812D /* BlankViewController.swift */; };
 		4028E5DA2088DED900C3812D /* BlankViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4028E5D82088DED900C3812D /* BlankViewController.xib */; };
@@ -59,6 +61,20 @@
 			remoteInfo = Everpobre;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4017127A20DC2A8B002FB8B6 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4017127C20DC2AE7002FB8B6 /* SkyFloatingLabelTextField.framework in CopyFiles */,
+				4017127B20DC2AE3002FB8B6 /* WSTagsField.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		4011D5DB2051CED100D3B262 /* Everpobre.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Everpobre.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -295,6 +311,7 @@
 				4011D5D82051CED100D3B262 /* Frameworks */,
 				4011D5D92051CED100D3B262 /* Resources */,
 				409D5BBE207A255C00690C4B /* ShellScript */,
+				4017127A20DC2A8B002FB8B6 /* CopyFiles */,
 			);
 			buildRules = (
 			);
